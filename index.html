@@ -26,29 +26,41 @@
       </div>
     </header>
 
-    <section class="hero-panel" aria-label="ProjectProof overview">
-      <div class="hero-copy">
-        <p class="eyebrow">Today</p>
-        <h2>Work dashboard</h2>
-        <p>Create proof reports, scan receipts, and send client-ready invoices.</p>
-        <div class="hero-proof-row" aria-label="Proof stages preview">
-          <article><img src="assets/proof-before-real.png" alt=""><span>Before</span></article>
-          <article><img src="assets/proof-progress-real.png" alt=""><span>Progress</span></article>
-          <article><img src="assets/proof-after-real.png" alt=""><span>After</span></article>
+    <section class="home-swipe" aria-label="Today and work records">
+      <section class="hero-panel" id="todayPanel" aria-label="ProjectProof overview">
+        <div class="hero-copy">
+          <p class="eyebrow">Today</p>
+          <h2>Work dashboard</h2>
+          <p>Create proof reports, scan receipts, and send client-ready invoices.</p>
+          <div class="hero-proof-row" aria-label="Proof stages preview">
+            <article><img src="assets/proof-before-real.png" alt=""><span>Before</span></article>
+            <article><img src="assets/proof-progress-real.png" alt=""><span>Progress</span></article>
+            <article><img src="assets/proof-after-real.png" alt=""><span>After</span></article>
+          </div>
+          <div class="hero-actions">
+            <button class="primary-button hero-new-button" type="button">New report</button>
+            <a class="secondary-link" href="#recordsPanel">Work records</a>
+          </div>
         </div>
-        <div class="hero-actions">
-          <button class="primary-button hero-new-button" type="button">New report</button>
-          <a class="secondary-link" href="#projectDetail">Open record</a>
+        <div class="app-status-panel">
+          <div class="status-ring"><strong>92%</strong><span>Proof score</span></div>
+          <div class="app-status-list">
+            <p><span></span>Photos, hours, notes, and costs in one record</p>
+            <p><span></span>Receipt OCR connected through Render</p>
+            <p><span></span>PDF invoice and client handoff ready</p>
+          </div>
         </div>
-      </div>
-      <div class="app-status-panel">
-        <div class="status-ring"><strong>92%</strong><span>Proof score</span></div>
-        <div class="app-status-list">
-          <p><span></span>Photos, hours, notes, and costs in one record</p>
-          <p><span></span>Receipt OCR connected through Render</p>
-          <p><span></span>PDF invoice and client handoff ready</p>
+      </section>
+
+      <aside class="project-list-panel" id="recordsPanel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Work record</p>
+            <h2>Work records</h2>
+          </div>
         </div>
-      </div>
+        <div id="projectList" class="project-list"></div>
+      </aside>
     </section>
 
     <section class="proof-strip" aria-label="Proof workflow">
@@ -81,22 +93,12 @@
     </section>
 
     <section class="workspace">
-      <aside class="project-list-panel" id="recordsPanel">
-        <div class="section-head">
-          <div>
-            <p class="eyebrow">Client reports</p>
-            <h2>Work records</h2>
-          </div>
-        </div>
-        <div id="projectList" class="project-list"></div>
-      </aside>
-
       <section class="project-detail" id="projectDetail" aria-live="polite"></section>
     </section>
   </main>
 
   <nav class="bottom-app-nav" aria-label="Primary actions">
-    <a href="#recordsPanel">Records</a>
+    <a href="#todayPanel">Today</a>
     <button class="primary-button hero-new-button" type="button">New</button>
     <a href="#projectDetail">Details</a>
   </nav>

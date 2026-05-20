@@ -185,13 +185,6 @@ projectDetail.addEventListener("click", async (event) => {
     return;
   }
 
-  if (action === "copy-client-portal") {
-    await copyClientPortal(project);
-    saveProjects();
-    render();
-    return;
-  }
-
   if (action === "create-invoice") {
     await createInvoicePdf(project);
     return;
@@ -398,14 +391,14 @@ function renderProjectDetail() {
     `;
     return;
   }
-  const progress = getProjectProgress(project);
   const estimate = getProjectEstimate(project);
   const invoiceTotal = getInvoiceTotal(project);
 
   projectDetail.innerHTML = `
     <div class="detail-header">
       <div>
-        <p class="eyebrow">${escapeHtml(project.type)}</p>
+        <p class="eyebrow">Work record</p>
+        <p class="detail-type">${escapeHtml(project.type)}</p>
         <h2>${escapeHtml(project.name)}</h2>
       </div>
       <div class="detail-actions">
@@ -448,7 +441,7 @@ function renderProjectDetail() {
     <div class="photo-grid">
       ${STAGES.map((stage) => renderPhotoCard(project, stage)).join("")}
     </div>
-    <div class="two-column">
+    <div class="two-column checklist-row">
       <section class="panel-box">
         <div class="section-head">
           <div>
@@ -464,14 +457,48 @@ function renderProjectDetail() {
           <button class="secondary-button" data-action="add-check" type="button">Add</button>
         </div>
       </section>
-      <section class="panel-box">
+    </div>
+    <section class="tool-swipe" aria-label="Estimate invoice and receipt tools">
+      <section class="panel-box estimate-panel">
         <div class="section-head">
           <div>
-          <p class="eyebrow">Invoice support</p>
-          <h3>Costs and hours</h3>
+            <p class="eyebrow">Client estimate</p>
+            <h3>Estimate and scope</h3>
+          </div>
+          <button class="secondary-button" data-action="save-estimate" type="button">Save estimate</button>
+        </div>
+        <div class="estimate-form">
+          <label>
+            <span>Estimate title</span>
+            <input id="estimateTitleInput" type="text" value="${escapeHtml(estimate.title)}" placeholder="Room paint, yard cleanup, wall repair">
+          </label>
+          <label>
+            <span>Estimate amount</span>
+            <input id="estimateAmountInput" type="number" min="0" step="0.01" value="${estimate.amount || ""}" placeholder="0.00">
+          </label>
+          <label class="estimate-scope-field">
+            <span>Scope shown to client</span>
+            <textarea id="estimateScopeInput" placeholder="Estimated room size, yard area, wall space, materials, labor assumptions">${escapeHtml(estimate.scope)}</textarea>
+          </label>
+          <div class="estimate-actions">
+            <button class="secondary-button" data-action="dictate-estimate" type="button">Dictate estimate</button>
+            <p class="feature-note">${escapeHtml(project.estimateDictationStatus || "Use voice-to-text to fill the estimate scope while walking the job.")}</p>
           </div>
         </div>
-        <div class="stack">
+      </section>
+      <section class="panel-box invoice-panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Invoice</p>
+            <h3>Costs and totals</h3>
+          </div>
+        </div>
+        <div class="invoice-metrics">
+          <article><span>Estimate</span><strong>${formatMoney(estimate.amount)}</strong></article>
+          <article><span>Current invoice</span><strong>${formatMoney(invoiceTotal)}</strong></article>
+          <article><span>Materials</span><strong>${formatMoney(getMaterialsTotal(project))}</strong></article>
+        </div>
+        <div class="stack invoice-materials">
           ${project.materials.length ? project.materials.map(renderMaterialRow).join("") : `<p class="muted">No materials logged.</p>`}
         </div>
         <div class="quick-form material-form">
@@ -484,35 +511,6 @@ function renderProjectDetail() {
           <button class="secondary-button" data-action="add-hours" type="button">Log</button>
         </div>
       </section>
-    </div>
-    <section class="panel-box estimate-panel">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Client estimate</p>
-          <h3>Estimate and scope</h3>
-        </div>
-        <button class="secondary-button" data-action="save-estimate" type="button">Save estimate</button>
-      </div>
-      <div class="estimate-form">
-        <label>
-          <span>Estimate title</span>
-          <input id="estimateTitleInput" type="text" value="${escapeHtml(estimate.title)}" placeholder="Room paint, yard cleanup, wall repair">
-        </label>
-        <label>
-          <span>Estimate amount</span>
-          <input id="estimateAmountInput" type="number" min="0" step="0.01" value="${estimate.amount || ""}" placeholder="0.00">
-        </label>
-        <label class="estimate-scope-field">
-          <span>Scope shown to client</span>
-          <textarea id="estimateScopeInput" placeholder="Estimated room size, yard area, wall space, materials, labor assumptions">${escapeHtml(estimate.scope)}</textarea>
-        </label>
-        <div class="estimate-actions">
-          <button class="secondary-button" data-action="dictate-estimate" type="button">Dictate estimate</button>
-          <p class="feature-note">${escapeHtml(project.estimateDictationStatus || "Use voice-to-text to fill the estimate scope while walking the job.")}</p>
-        </div>
-      </div>
-    </section>
-    <section class="market-tools">
       <section class="panel-box receipt-panel">
         <div class="section-head">
           <div>
@@ -542,36 +540,6 @@ function renderProjectDetail() {
             <button class="secondary-button" data-action="add-receipt-material" type="button">Add to costs</button>
           </div>
         </div>
-      </section>
-      <section class="panel-box portal-panel">
-        <div class="section-head">
-          <div>
-            <p class="eyebrow">Client portal</p>
-            <h3>Client view</h3>
-          </div>
-          <button class="secondary-button" data-action="copy-client-portal" type="button">Copy</button>
-        </div>
-        <div class="client-portal-card">
-          <div class="portal-progress-head">
-            <div>
-              <strong>${progress.percent}% complete</strong>
-              <span>${progress.completed}/${progress.total} checklist items finished</span>
-            </div>
-            <span>${escapeHtml(project.status === "complete" ? "Complete" : "In progress")}</span>
-          </div>
-          <div class="portal-progress-bar"><i style="width:${progress.percent}%"></i></div>
-          <div class="portal-metrics">
-            <article><span>Estimate</span><strong>${formatMoney(estimate.amount)}</strong></article>
-            <article><span>Current invoice</span><strong>${formatMoney(invoiceTotal)}</strong></article>
-            <article><span>Hours</span><strong>${formatNumber(project.hours)}</strong></article>
-          </div>
-          <div class="portal-scope">
-            <span>Scope</span>
-            <p>${escapeHtml(estimate.scope || "No estimate scope saved yet.")}</p>
-          </div>
-        </div>
-        <p class="feature-note">This is the client-facing view: estimate, current invoice total, and project progress from your checklist.</p>
-        <pre class="portal-preview">${escapeHtml(buildClientPortalPacket(project))}</pre>
       </section>
     </section>
     <section class="ai-panel">
@@ -673,16 +641,6 @@ function getCompletedChecks(project) {
   return project.checklist.filter((item) => item.done).length;
 }
 
-function getProjectProgress(project) {
-  const total = Math.max(project.checklist.length, 1);
-  const completed = getCompletedChecks(project);
-  return {
-    completed,
-    total,
-    percent: Math.round((completed / total) * 100)
-  };
-}
-
 function getMaterialsTotal(project) {
   return project.materials.reduce((sum, item) => sum + Number(item.cost || 0), 0);
 }
@@ -719,29 +677,6 @@ ${checks}
 
 Materials:
 ${materials}
-
-Notes:
-${project.notes || "No notes added."}`;
-}
-
-function buildClientPortalPacket(project) {
-  const photos = STAGES.filter((stage) => project.photos?.[stage]).map((stage) => stage[0].toUpperCase() + stage.slice(1));
-  const businessLine = businessProfile.name ? `${businessProfile.name}\n` : "";
-  const progress = getProjectProgress(project);
-  const estimate = getProjectEstimate(project);
-  return `${businessLine}${project.name}
-Client/location: ${project.client || "Not set"}
-Status: ${project.status === "complete" ? "Complete" : "Active"}
-Progress: ${progress.percent}% (${progress.completed}/${progress.total} checklist items complete)
-Estimate: ${estimate.title || "Not titled"} - ${formatMoney(estimate.amount)}
-Estimate scope: ${estimate.scope || "Not set"}
-Hours: ${formatNumber(project.hours)}
-Current invoice total: ${formatMoney(getInvoiceTotal(project))}
-Materials: ${formatMoney(getMaterialsTotal(project))}
-Photos attached: ${photos.length ? photos.join(", ") : "None yet"}
-
-Client handoff:
-${buildAiNote(project)}
 
 Notes:
 ${project.notes || "No notes added."}`;
@@ -1308,10 +1243,6 @@ function formatDate(date) {
 async function copyReport(project) {
   const report = buildReport(project);
   await navigator.clipboard?.writeText(report).catch(() => {});
-}
-
-async function copyClientPortal(project) {
-  await navigator.clipboard?.writeText(buildClientPortalPacket(project)).catch(() => {});
 }
 
 function fileToDataUrl(file) {

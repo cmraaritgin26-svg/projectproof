@@ -188,13 +188,22 @@ h1 {
   box-shadow: none;
 }
 
+.home-swipe {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(238px, 0.34fr);
+  gap: 10px;
+  align-items: start;
+  margin-bottom: 10px;
+  scroll-behavior: smooth;
+}
+
 .hero-panel {
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(230px, 0.9fr);
   gap: 10px;
   align-items: stretch;
-  margin: 0 0 10px;
+  margin: 0;
   border: 1px solid rgba(226, 235, 247, 0.16);
   border-radius: 8px;
   background:
@@ -475,9 +484,7 @@ h1 {
 }
 
 .workspace {
-  display: grid;
-  grid-template-columns: minmax(238px, 0.34fr) minmax(0, 1fr);
-  gap: 10px;
+  display: block;
   align-items: start;
   scroll-behavior: smooth;
 }
@@ -575,6 +582,14 @@ h1 {
   font-size: clamp(1.42rem, 4vw, 2.15rem);
   line-height: 1.04;
   overflow-wrap: anywhere;
+}
+
+.detail-type {
+  margin-bottom: 5px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 .detail-actions,
@@ -707,8 +722,37 @@ h1 {
   margin-bottom: 10px;
 }
 
-.estimate-panel {
-  margin-bottom: 10px;
+.checklist-row {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.tool-swipe {
+  display: flex;
+  gap: 10px;
+  margin: 0 -2px 10px;
+  overflow-x: auto;
+  padding: 0 2px 5px;
+  scroll-padding-inline: 2px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tool-swipe::-webkit-scrollbar {
+  display: none;
+}
+
+.tool-swipe > .panel-box {
+  flex: 0 0 min(520px, 92vw);
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.estimate-panel,
+.invoice-panel,
+.receipt-panel {
+  display: grid;
+  align-content: start;
+  gap: 10px;
 }
 
 .estimate-form {
@@ -740,109 +784,40 @@ h1 {
   margin-bottom: 10px;
 }
 
-.portal-panel {
-  grid-column: auto;
-}
-
-.client-portal-card {
-  display: grid;
-  gap: 10px;
-  border: 1px solid rgba(127, 180, 255, 0.16);
-  border-radius: 8px;
-  background:
-    linear-gradient(135deg, rgba(45, 101, 216, 0.12), rgba(19, 143, 134, 0.1)),
-    rgba(5, 10, 18, 0.42);
-  padding: 12px;
-  margin-bottom: 10px;
-}
-
-.portal-progress-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.portal-progress-head strong,
-.portal-progress-head span,
-.portal-metrics span,
-.portal-metrics strong,
-.portal-scope span,
-.portal-scope p {
+.invoice-metrics span,
+.invoice-metrics strong {
   display: block;
 }
 
-.portal-progress-head strong {
-  color: #f8fbff;
-  font-size: 1.2rem;
-}
-
-.portal-progress-head span {
-  color: var(--muted);
-  font-size: 0.76rem;
-  font-weight: 850;
-}
-
-.portal-progress-head > span {
-  border: 1px solid rgba(127, 180, 255, 0.18);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  color: #cfe2ff;
-  padding: 6px 9px;
-}
-
-.portal-progress-bar {
-  height: 10px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: rgba(226, 235, 247, 0.1);
-}
-
-.portal-progress-bar i {
-  display: block;
-  height: 100%;
-  min-width: 4px;
-  border-radius: inherit;
-  background: linear-gradient(90deg, var(--blue), var(--teal));
-}
-
-.portal-metrics {
+.invoice-metrics {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
 }
 
-.portal-metrics article {
+.invoice-metrics article {
   border: 1px solid rgba(226, 235, 247, 0.1);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.045);
   padding: 9px;
 }
 
-.portal-metrics span,
-.portal-scope span {
+.invoice-metrics span {
   color: var(--muted);
   font-size: 0.68rem;
   font-weight: 900;
   text-transform: uppercase;
 }
 
-.portal-metrics strong {
+.invoice-metrics strong {
   margin-top: 5px;
   color: var(--ink);
   font-size: 1.05rem;
 }
 
-.portal-scope {
-  border-top: 1px solid rgba(226, 235, 247, 0.1);
-  padding-top: 9px;
-}
-
-.portal-scope p {
-  margin-top: 5px;
-  color: #d5deeb;
-  font-size: 0.86rem;
-  line-height: 1.42;
+.invoice-materials {
+  max-height: 162px;
+  overflow: auto;
 }
 
 .business-form {
@@ -898,21 +873,6 @@ h1 {
   min-height: 32px;
   padding: 0 12px;
   font-size: 0.74rem;
-}
-
-.portal-preview {
-  max-height: 220px;
-  margin: 0;
-  white-space: pre-wrap;
-  border: 1px solid rgba(127, 180, 255, 0.14);
-  border-radius: 8px;
-  background: rgba(5, 10, 18, 0.5);
-  color: #dce7f6;
-  padding: 10px;
-  font-family: "SF Mono", "Roboto Mono", ui-monospace, monospace;
-  font-size: 0.76rem;
-  line-height: 1.42;
-  overflow: auto;
 }
 
 .ai-panel {
@@ -1157,6 +1117,21 @@ dialog::backdrop {
     background: var(--bg);
   }
 
+  .home-swipe {
+    display: flex;
+    gap: 10px;
+    margin-inline: -10px;
+    overflow-x: auto;
+    padding: 0 10px 4px;
+    scroll-padding-inline: 10px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .home-swipe::-webkit-scrollbar {
+    display: none;
+  }
+
   .hero-panel {
     grid-template-columns: 1fr;
   }
@@ -1176,32 +1151,27 @@ dialog::backdrop {
   }
 
   .workspace {
-    display: flex;
-    gap: 10px;
-    align-items: stretch;
-    margin-inline: -10px;
-    overflow-x: auto;
-    padding: 0 10px 4px;
-    scroll-padding-inline: 10px;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .workspace::-webkit-scrollbar {
-    display: none;
+    display: block;
+    margin-inline: 0;
+    overflow: visible;
+    padding: 0;
   }
 
   .project-list-panel {
     position: static;
   }
 
-  .project-list-panel,
-  .project-detail {
+  .home-swipe > .hero-panel,
+  .home-swipe > .project-list-panel {
     flex: 0 0 min(520px, calc(100vw - 20px));
     max-width: min(520px, calc(100vw - 20px));
     min-height: 560px;
     scroll-snap-align: start;
     scroll-snap-stop: always;
+  }
+
+  .project-detail {
+    min-height: 560px;
   }
 }
 
@@ -1270,7 +1240,7 @@ dialog::backdrop {
   .record-edit-form,
   .estimate-form,
   .estimate-actions,
-  .portal-metrics,
+  .invoice-metrics,
   .market-tools,
   .receipt-body,
   .two-column,
@@ -1278,6 +1248,10 @@ dialog::backdrop {
   .quick-form,
   .material-form {
     grid-template-columns: 1fr;
+  }
+
+  .tool-swipe > .panel-box {
+    flex-basis: calc(100vw - 20px);
   }
 
   .proof-strip article {
