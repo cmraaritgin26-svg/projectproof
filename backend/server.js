@@ -24,10 +24,15 @@ app.use(express.json({ limit: "12mb" }));
 let visionClient;
 
 app.get("/health", (_request, response) => {
+  const googleStatus = getGoogleCredentialStatus();
   response.json({
     ok: true,
     service: "projectproof-ocr",
-    googleConfigured: Boolean(process.env.GOOGLE_SERVICE_ACCOUNT_JSON)
+    googleConfigured: Boolean(process.env.GOOGLE_SERVICE_ACCOUNT_JSON),
+    googleCredentialsValid: googleStatus.valid,
+    googleProjectId: googleStatus.projectId,
+    googleClientEmail: googleStatus.clientEmail,
+    googleError: googleStatus.error
   });
 });
 
@@ -44,7 +49,7 @@ app.post("/ocr/receipt", async (request, response) => {
     }
 
     const [result] = await getVisionClient().textDetection({
-      image: { content: imageBase64 }
+      image: { content: Buffer.from(imageBase64, "base64") }
     });
     const text = result.fullTextAnnotation?.text || result.textAnnotations?.[0]?.description || "";
     const parsed = parseReceiptText(text);
@@ -62,7 +67,7 @@ app.post("/ocr/receipt", async (request, response) => {
     response.status(500).json({
       ok: false,
       error: "OCR failed",
-      detail: process.env.NODE_ENV === "production" ? undefined : String(error?.message || error)
+      detail: sanitizeError(error)
     });
   }
 });
@@ -85,6 +90,28 @@ function getVisionClient() {
     projectId: credentials.project_id
   });
   return visionClient;
+}
+
+function getGoogleCredentialStatus() {
+  const credentialsJson = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
+  if (!credentialsJson) return { valid: false, projectId: "", clientEmail: "", error: "missing" };
+  try {
+    const credentials = JSON.parse(credentialsJson);
+    return {
+      valid: credentials.type === "service_account" && Boolean(credentials.private_key) && Boolean(credentials.client_email),
+      projectId: credentials.project_id || "",
+      clientEmail: credentials.client_email || "",
+      error: ""
+    };
+  } catch {
+    return { valid: false, projectId: "", clientEmail: "", error: "invalid_json" };
+  }
+}
+
+function sanitizeError(error) {
+  const message = String(error?.message || error || "unknown");
+  if (/private_key|BEGIN PRIVATE KEY|client_secret/i.test(message)) return "credential_error";
+  return message.slice(0, 220);
 }
 
 function normalizeImagePayload(value) {
