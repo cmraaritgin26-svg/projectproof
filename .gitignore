@@ -1,6 +1,8 @@
 node_modules
 www
 tmp
+projectproof-ocr-test.png
+.play-signing
 
 *.apk
 *.aab

@@ -8,6 +8,7 @@
     "serve": "python -m http.server 8080",
     "check": "node --check app.js",
     "sync:www": "mkdir -p www/assets && cp index.html app.js styles.css manifest.webmanifest www/ && cp -R assets/. www/assets/",
-    "build:apk": "npm run check && npm run sync:www && node ../MLB-Stats-Tracker/node_modules/@capacitor/cli/bin/capacitor sync android && cd android && gradle --no-daemon -Dkotlin.compiler.execution.strategy=in-process -Dkotlin.incremental=false -Pandroid.aapt2FromMavenOverride=/data/data/com.termux/files/usr/bin/aapt2 -PlocalSdk34 -Pkotlin_version=2.2.0 assembleDebug"
+    "build:apk": "npm run check && npm run sync:www && node ../MLB-Stats-Tracker/node_modules/@capacitor/cli/bin/capacitor sync android && cd android && gradle --no-daemon -Dkotlin.compiler.execution.strategy=in-process -Dkotlin.incremental=false -Pandroid.aapt2FromMavenOverride=/data/data/com.termux/files/usr/bin/aapt2 -PlocalSdk34 -Pkotlin_version=2.2.0 assembleDebug",
+    "build:playstore-aab": "npm run check && npm run sync:www && node ../MLB-Stats-Tracker/node_modules/@capacitor/cli/bin/capacitor sync android && cd android && gradle --no-daemon -Dkotlin.compiler.execution.strategy=in-process -Dkotlin.incremental=false -Pandroid.aapt2FromMavenOverride=/data/data/com.termux/files/usr/bin/aapt2 -PlocalSdk34 -Pkotlin_version=2.2.0 bundleRelease"
   }
 }

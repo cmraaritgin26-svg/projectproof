@@ -1,5 +1,13 @@
 apply plugin: 'com.android.application'
 
+def playVersionCode = (System.getenv("PLAY_VERSION_CODE") ?: "3").toInteger()
+def playVersionName = System.getenv("PLAY_VERSION_NAME") ?: "1.4"
+def playKeystorePath = System.getenv("PLAY_KEYSTORE_PATH")
+def playKeystorePassword = System.getenv("PLAY_KEYSTORE_PASSWORD")
+def playKeyAlias = System.getenv("PLAY_KEY_ALIAS")
+def playKeyPassword = System.getenv("PLAY_KEY_PASSWORD")
+def hasPlaySigning = playKeystorePath && playKeystorePassword && playKeyAlias && playKeyPassword
+
 android {
     namespace "com.craigsdevelopments.projectproof"
     compileSdk rootProject.ext.compileSdkVersion
@@ -7,8 +15,8 @@ android {
         applicationId "com.craigsdevelopments.projectproof"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2
-        versionName "1.1"
+        versionCode playVersionCode
+        versionName playVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -16,10 +24,23 @@ android {
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    signingConfigs {
+        if (hasPlaySigning) {
+            release {
+                storeFile file(playKeystorePath)
+                storePassword playKeystorePassword
+                keyAlias playKeyAlias
+                keyPassword playKeyPassword
+            }
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            if (hasPlaySigning) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 }
