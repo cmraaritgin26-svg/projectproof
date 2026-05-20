@@ -6,6 +6,11 @@ const STAGES = ["before", "progress", "after"];
 const projectList = document.querySelector("#projectList");
 const projectDetail = document.querySelector("#projectDetail");
 const newProjectButton = document.querySelector("#newProjectButton");
+const settingsButton = document.querySelector("#settingsButton");
+const settingsDialog = document.querySelector("#settingsDialog");
+const settingsForm = document.querySelector("#settingsForm");
+const closeSettingsDialog = document.querySelector("#closeSettingsDialog");
+const settingsBusinessFields = document.querySelector("#settingsBusinessFields");
 const projectDialog = document.querySelector("#projectDialog");
 const projectForm = document.querySelector("#projectForm");
 const projectName = document.querySelector("#projectName");
@@ -26,6 +31,10 @@ newProjectButton.addEventListener("click", () => {
   openProjectDialog();
 });
 
+settingsButton?.addEventListener("click", () => {
+  openSettingsDialog();
+});
+
 heroNewButtons.forEach((button) => button.addEventListener("click", () => {
   openProjectDialog();
 }));
@@ -34,11 +43,27 @@ closeProjectDialog?.addEventListener("click", () => {
   projectDialog.close();
 });
 
+closeSettingsDialog?.addEventListener("click", () => {
+  settingsDialog.close();
+});
+
 function openProjectDialog() {
   projectForm.reset();
   projectDialog.showModal();
   projectName.focus();
 }
+
+function openSettingsDialog() {
+  settingsBusinessFields.innerHTML = renderBusinessFields();
+  settingsDialog.showModal();
+  document.querySelector("#businessNameInput")?.focus();
+}
+
+settingsForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  saveBusinessProfileFromForm();
+  settingsDialog.close();
+});
 
 projectForm.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -101,13 +126,7 @@ projectDetail.addEventListener("click", async (event) => {
   }
 
   if (action === "save-business-profile") {
-    businessProfile = {
-      name: document.querySelector("#businessNameInput").value.trim(),
-      email: document.querySelector("#businessEmailInput").value.trim(),
-      phone: document.querySelector("#businessPhoneInput").value.trim(),
-      ocrEndpoint: document.querySelector("#ocrEndpointInput").value.trim()
-    };
-    saveBusinessProfile();
+    saveBusinessProfileFromForm();
   }
 
   if (action === "add-check") {
@@ -242,6 +261,16 @@ function saveProjects() {
 
 function saveBusinessProfile() {
   localStorage.setItem(BUSINESS_KEY, JSON.stringify(businessProfile));
+}
+
+function saveBusinessProfileFromForm() {
+  businessProfile = {
+    name: document.querySelector("#businessNameInput")?.value.trim() || "",
+    email: document.querySelector("#businessEmailInput")?.value.trim() || "",
+    phone: document.querySelector("#businessPhoneInput")?.value.trim() || "",
+    ocrEndpoint: document.querySelector("#ocrEndpointInput")?.value.trim() || ""
+  };
+  saveBusinessProfile();
 }
 
 function seedDemoProject() {
@@ -484,34 +513,6 @@ function renderProjectDetail() {
       </div>
     </section>
     <section class="market-tools">
-      <section class="panel-box business-panel">
-        <div class="section-head">
-          <div>
-            <p class="eyebrow">Paid branding</p>
-            <h3>Business profile</h3>
-          </div>
-          <button class="secondary-button" data-action="save-business-profile" type="button">Save</button>
-        </div>
-        <div class="business-form">
-          <label>
-            <span>Business name</span>
-            <input id="businessNameInput" type="text" value="${escapeHtml(businessProfile.name || "")}" placeholder="Your business name">
-          </label>
-          <label>
-            <span>Email</span>
-            <input id="businessEmailInput" type="email" value="${escapeHtml(businessProfile.email || "")}" placeholder="you@example.com">
-          </label>
-          <label>
-            <span>Phone</span>
-            <input id="businessPhoneInput" type="tel" value="${escapeHtml(businessProfile.phone || "")}" placeholder="Phone number">
-          </label>
-          <label>
-            <span>OCR backend</span>
-            <input id="ocrEndpointInput" type="url" value="${escapeHtml(businessProfile.ocrEndpoint || DEFAULT_OCR_ENDPOINT)}" placeholder="https://projectproof-ocr.onrender.com/ocr/receipt">
-          </label>
-        </div>
-        <p class="feature-note">Saved business info appears at the top of generated invoices.</p>
-      </section>
       <section class="panel-box receipt-panel">
         <div class="section-head">
           <div>
@@ -641,6 +642,29 @@ function renderMaterialRow(item) {
     <div class="material-row">
       <span>${escapeHtml(item.name)}</span>
       <strong>${formatMoney(item.cost)}</strong>
+    </div>
+  `;
+}
+
+function renderBusinessFields() {
+  return `
+    <div class="business-form">
+      <label>
+        <span>Business name</span>
+        <input id="businessNameInput" type="text" value="${escapeHtml(businessProfile.name || "")}" placeholder="Your business name">
+      </label>
+      <label>
+        <span>Email</span>
+        <input id="businessEmailInput" type="email" value="${escapeHtml(businessProfile.email || "")}" placeholder="you@example.com">
+      </label>
+      <label>
+        <span>Phone</span>
+        <input id="businessPhoneInput" type="tel" value="${escapeHtml(businessProfile.phone || "")}" placeholder="Phone number">
+      </label>
+      <label>
+        <span>OCR backend</span>
+        <input id="ocrEndpointInput" type="url" value="${escapeHtml(businessProfile.ocrEndpoint || DEFAULT_OCR_ENDPOINT)}" placeholder="https://projectproof-ocr.onrender.com/ocr/receipt">
+      </label>
     </div>
   `;
 }

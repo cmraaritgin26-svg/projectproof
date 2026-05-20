@@ -21,6 +21,7 @@
       </div>
       <div class="top-actions">
         <span class="plan-pill">Report Maker</span>
+        <button class="icon-button subtle" id="settingsButton" title="Settings" aria-label="Settings">⚙</button>
         <button class="icon-button" id="newProjectButton" title="New project" aria-label="New project">+</button>
       </div>
     </header>
@@ -130,6 +131,21 @@
         </select>
       </label>
       <button class="primary-button" type="submit">Create proof report</button>
+    </form>
+  </dialog>
+
+  <dialog id="settingsDialog">
+    <form class="dialog-panel settings-panel" id="settingsForm">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Settings</p>
+          <h2>Paid branding</h2>
+        </div>
+        <button class="icon-button subtle" id="closeSettingsDialog" type="button" aria-label="Close">×</button>
+      </div>
+      <div id="settingsBusinessFields"></div>
+      <p class="feature-note">Business branding appears on generated invoices. OCR backend is used by receipt scanning.</p>
+      <button class="primary-button" type="submit">Save settings</button>
     </form>
   </dialog>
 
