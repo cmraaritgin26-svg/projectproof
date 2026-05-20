@@ -1,0 +1,8 @@
+{
+  "appId": "com.craigsdevelopments.projectproof",
+  "appName": "ProjectProof",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}

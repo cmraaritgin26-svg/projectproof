@@ -1,0 +1,17 @@
+{
+  "name": "ProjectProof",
+  "short_name": "ProjectProof",
+  "description": "Before-after proof reports for small service pros.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#070c14",
+  "theme_color": "#0a101b",
+  "icons": [
+    {
+      "src": "assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a101b">
+  <title>ProjectProof</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icon.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <img src="assets/brand-mark.svg" alt="" class="brand-mark">
+        <div class="brand-copy">
+          <p class="brand-title">ProjectProof</p>
+          <h1>Before-after reports for paid work</h1>
+        </div>
+      </div>
+      <div class="top-actions">
+        <span class="plan-pill">Report Maker</span>
+        <button class="icon-button" id="newProjectButton" title="New project" aria-label="New project">+</button>
+      </div>
+    </header>
+
+    <section class="hero-panel" aria-label="ProjectProof overview">
+      <div class="hero-copy">
+        <p class="eyebrow">Built for small service pros</p>
+        <h2>Send proof of work.</h2>
+        <p>Create a client-ready document in minutes</p>
+        <div class="hero-proof-row" aria-label="Proof stages preview">
+          <img src="assets/proof-before-real.png" alt="">
+          <img src="assets/proof-progress-real.png" alt="">
+          <img src="assets/proof-after-real.png" alt="">
+        </div>
+        <div class="hero-actions">
+          <button class="primary-button hero-new-button" type="button">Create proof report</button>
+        </div>
+      </div>
+      <div class="hero-image-wrap">
+        <img src="assets/project-hero.png" alt="A worker documenting a completed project with a phone">
+        <div class="hero-status-card" aria-hidden="true">
+          <div><span>Proof score</span><strong>92%</strong></div>
+          <div class="status-bars"><i></i><i></i><i></i></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="proof-strip" aria-label="Proof workflow">
+      <article><img src="assets/proof-before-real.png" alt=""><div><strong>Before</strong><span>Show the starting condition</span></div></article>
+      <article><img src="assets/proof-progress-real.png" alt=""><div><strong>Progress</strong><span>Document work performed</span></div></article>
+      <article><img src="assets/proof-after-real.png" alt=""><div><strong>After</strong><span>Send client-ready proof</span></div></article>
+    </section>
+
+    <section class="summary-grid" aria-label="Project summary">
+      <article class="summary-card primary">
+        <span>Open reports</span>
+        <strong id="activeJobs">0</strong>
+        <small>Ready to finish</small>
+      </article>
+      <article class="summary-card">
+        <span>Proof photos</span>
+        <strong id="photoCount">0</strong>
+        <small>Attached evidence</small>
+      </article>
+      <article class="summary-card">
+        <span>Hours logged</span>
+        <strong id="hoursCount">0</strong>
+        <small>Billable record</small>
+      </article>
+      <article class="summary-card">
+        <span>Costs</span>
+        <strong id="materialsTotal">$0</strong>
+        <small>Invoice support</small>
+      </article>
+    </section>
+
+    <section class="workspace">
+      <aside class="project-list-panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Client reports</p>
+            <h2>Work records</h2>
+          </div>
+        </div>
+        <div id="projectList" class="project-list"></div>
+      </aside>
+
+      <section class="project-detail" id="projectDetail" aria-live="polite"></section>
+    </section>
+  </main>
+
+  <dialog id="projectDialog">
+    <form class="dialog-panel" id="projectForm">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">New proof report</p>
+          <h2>Start client record</h2>
+        </div>
+        <button class="icon-button subtle" id="closeProjectDialog" type="button" aria-label="Close">×</button>
+      </div>
+      <label>
+        <span>Project name</span>
+        <input id="projectName" type="text" placeholder="Back patio cleanup" required>
+      </label>
+      <label>
+        <span>Client or location</span>
+        <input id="projectClient" type="text" placeholder="Home, client name, or address">
+      </label>
+      <label>
+        <span>Job type</span>
+        <select id="projectType">
+          <option>Landscaping</option>
+          <option>Cleaning</option>
+          <option>Painting</option>
+          <option>Handyman</option>
+          <option>Repair</option>
+          <option>Inspection</option>
+          <option>Other</option>
+        </select>
+      </label>
+      <button class="primary-button" type="submit">Create proof report</button>
+    </form>
+  </dialog>
+
+  <script src="app.js" type="module"></script>
+</body>
+</html>

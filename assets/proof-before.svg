@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#dbeafe"/>
+      <stop offset="1" stop-color="#f8fafc"/>
+    </linearGradient>
+    <linearGradient id="ground" x1="0" x2="1">
+      <stop stop-color="#b6a38b"/>
+      <stop offset="1" stop-color="#d6c2a4"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="620" fill="url(#sky)"/>
+  <rect y="380" width="900" height="240" fill="url(#ground)"/>
+  <rect x="96" y="166" width="708" height="250" rx="18" fill="#e2e8f0"/>
+  <rect x="126" y="196" width="160" height="145" rx="12" fill="#94a3b8"/>
+  <rect x="316" y="196" width="160" height="145" rx="12" fill="#94a3b8"/>
+  <rect x="506" y="196" width="160" height="145" rx="12" fill="#94a3b8"/>
+  <path d="M122 474c102-46 178 8 280-34 90-37 152 25 284-16 52-16 92-5 132 20v176H122z" fill="#6b7280" opacity=".55"/>
+  <path d="M112 494c52-30 101-37 147-20 38 14 78 44 129 31 64-17 103-69 170-45 64 23 114 54 193 22 39-16 76-17 112-2v140H112z" fill="#475569" opacity=".8"/>
+  <rect x="40" y="42" width="190" height="58" rx="29" fill="#111827" opacity=".82"/>
+  <text x="72" y="79" fill="#fff" font-family="Arial" font-size="26" font-weight="700">BEFORE</text>
+</svg>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="ProjectProof icon concept D">
+  <defs>
+    <linearGradient id="bgD" x1="70" y1="38" x2="440" y2="472">
+      <stop stop-color="#050a12"/>
+      <stop offset=".55" stop-color="#101827"/>
+      <stop offset="1" stop-color="#173747"/>
+    </linearGradient>
+    <linearGradient id="lensD" x1="142" y1="142" x2="370" y2="370">
+      <stop stop-color="#4f8cff"/>
+      <stop offset=".54" stop-color="#18a498"/>
+      <stop offset="1" stop-color="#d29a3f"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bgD)"/>
+  <rect x="112" y="154" width="288" height="222" rx="54" fill="#f4f8ff"/>
+  <rect x="152" y="126" width="120" height="52" rx="24" fill="#f4f8ff"/>
+  <circle cx="256" cy="266" r="82" fill="#101827"/>
+  <circle cx="256" cy="266" r="56" fill="none" stroke="url(#lensD)" stroke-width="24"/>
+  <path d="M226 268l28 28 56-67" fill="none" stroke="#f4f8ff" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="354" cy="204" r="15" fill="#d29a3f"/>
+</svg>

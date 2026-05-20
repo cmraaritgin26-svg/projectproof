@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="ProjectProof camera icon concept 2">
+  <defs>
+    <linearGradient id="bg" x1="70" y1="38" x2="440" y2="472">
+      <stop stop-color="#050a12"/>
+      <stop offset=".55" stop-color="#101827"/>
+      <stop offset="1" stop-color="#173747"/>
+    </linearGradient>
+    <linearGradient id="lens" x1="140" y1="140" x2="372" y2="372">
+      <stop stop-color="#5b95ff"/>
+      <stop offset=".52" stop-color="#18a498"/>
+      <stop offset="1" stop-color="#d29a3f"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <path d="M76 380c70-31 130-33 192-16 74 20 128 7 168-34v108H76z" fill="#020713" opacity=".4"/>
+  <rect x="100" y="164" width="312" height="214" rx="42" fill="#f5f8ff"/>
+  <path d="M166 164l28-42h124l28 42z" fill="#f5f8ff"/>
+  <rect x="132" y="204" width="72" height="20" rx="10" fill="#101827" opacity=".72"/>
+  <circle cx="264" cy="274" r="88" fill="#101827"/>
+  <circle cx="264" cy="274" r="58" fill="url(#lens)"/>
+  <circle cx="264" cy="274" r="34" fill="#101827"/>
+  <path d="M234 276l24 24 48-58" fill="none" stroke="#f5f8ff" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="366" cy="206" r="16" fill="#d29a3f"/>
+</svg>

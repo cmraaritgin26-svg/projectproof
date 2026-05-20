@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="ProjectProof">
+  <defs>
+    <linearGradient id="bg" x1="64" y1="42" x2="448" y2="470">
+      <stop stop-color="#0a101b"/>
+      <stop offset=".56" stop-color="#101827"/>
+      <stop offset="1" stop-color="#183846"/>
+    </linearGradient>
+    <linearGradient id="cameraBlue" x1="92" y1="120" x2="420" y2="390">
+      <stop stop-color="#101827"/>
+      <stop offset=".58" stop-color="#172235"/>
+      <stop offset="1" stop-color="#23314a"/>
+    </linearGradient>
+    <linearGradient id="lens" x1="142" y1="142" x2="370" y2="370">
+      <stop stop-color="#2d65d8"/>
+      <stop offset=".52" stop-color="#168f86"/>
+      <stop offset="1" stop-color="#d29a3f"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <path d="M72 382c72-30 132-31 194-15 74 20 126 7 174-34v108H72z" fill="#020713" opacity=".34"/>
+  <g transform="translate(256 256) scale(.82) translate(-256 -256)">
+    <path d="M150 120h124c15 0 28 8 36 21l10 15h42c30 0 54 24 54 54v118c0 30-24 54-54 54H150c-30 0-54-24-54-54V210c0-30 24-54 54-54h18z" fill="url(#cameraBlue)" stroke="#f8fbff" stroke-width="10" stroke-linejoin="round"/>
+    <rect x="318" y="180" width="44" height="24" rx="12" fill="#f8fbff" opacity=".9"/>
+    <circle cx="256" cy="270" r="92" fill="#f6f8fb" stroke="#f8fbff" stroke-width="10"/>
+    <circle cx="256" cy="270" r="62" fill="none" stroke="url(#lens)" stroke-width="24"/>
+    <circle cx="256" cy="270" r="21" fill="#101827"/>
+    <path d="M216 294l28 28 64-78" fill="none" stroke="#101827" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="374" cy="202" r="15" fill="#d29a3f"/>
+  </g>
+</svg>

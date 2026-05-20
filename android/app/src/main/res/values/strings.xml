@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">ProjectProof</string>
+    <string name="title_activity_main">ProjectProof</string>
+    <string name="package_name">com.craigsdevelopments.projectproof</string>
+    <string name="custom_url_scheme">com.craigsdevelopments.projectproof</string>
+</resources>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="ProjectProof icon concept E">
+  <defs>
+    <linearGradient id="bgE" x1="68" y1="44" x2="444" y2="468">
+      <stop stop-color="#08111d"/>
+      <stop offset=".6" stop-color="#101827"/>
+      <stop offset="1" stop-color="#0f3a3d"/>
+    </linearGradient>
+    <linearGradient id="shieldE" x1="144" y1="84" x2="366" y2="426">
+      <stop stop-color="#f8fafc"/>
+      <stop offset="1" stop-color="#cdd7e7"/>
+    </linearGradient>
+    <linearGradient id="accentE" x1="168" y1="170" x2="344" y2="348">
+      <stop stop-color="#4f8cff"/>
+      <stop offset=".55" stop-color="#18a498"/>
+      <stop offset="1" stop-color="#d29a3f"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bgE)"/>
+  <path d="M256 74l144 58v98c0 94-54 165-144 208-90-43-144-114-144-208v-98z" fill="url(#shieldE)"/>
+  <path d="M256 112l102 40v78c0 66-35 116-102 151-67-35-102-85-102-151v-78z" fill="#101827"/>
+  <path d="M198 260l42 42 82-94" fill="none" stroke="url(#accentE)" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M183 166h146" stroke="#f4f8ff" stroke-opacity=".26" stroke-width="16" stroke-linecap="round"/>
+</svg>

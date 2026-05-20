@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="ProjectProof icon concept B">
+  <defs>
+    <linearGradient id="bgB" x1="64" y1="40" x2="452" y2="470">
+      <stop stop-color="#08111f"/>
+      <stop offset=".62" stop-color="#101827"/>
+      <stop offset="1" stop-color="#143c43"/>
+    </linearGradient>
+    <linearGradient id="barB" x1="128" y1="116" x2="384" y2="392">
+      <stop stop-color="#4f8cff"/>
+      <stop offset=".58" stop-color="#18a498"/>
+      <stop offset="1" stop-color="#d79b37"/>
+    </linearGradient>
+    <filter id="shadowB" x="-24%" y="-24%" width="148%" height="148%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000000" flood-opacity=".38"/>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bgB)"/>
+  <path d="M74 378c68-30 125-34 188-18 76 19 129 9 176-35v114H74z" fill="#020713" opacity=".38"/>
+  <g filter="url(#shadowB)">
+    <rect x="150" y="92" width="212" height="308" rx="42" fill="#f3f7ff"/>
+    <rect x="188" y="140" width="136" height="18" rx="9" fill="#101827"/>
+    <rect x="188" y="188" width="136" height="14" rx="7" fill="#9aa7ba"/>
+    <rect x="188" y="222" width="96" height="14" rx="7" fill="#c7d0de"/>
+    <rect x="188" y="256" width="122" height="14" rx="7" fill="#c7d0de"/>
+    <path d="M174 340h164" stroke="url(#barB)" stroke-width="28" stroke-linecap="round"/>
+    <circle cx="344" cy="348" r="58" fill="#101827"/>
+    <path d="M318 350l20 20 42-54" fill="none" stroke="#f3f7ff" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

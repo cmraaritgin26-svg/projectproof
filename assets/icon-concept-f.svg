@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="ProjectProof icon concept F">
+  <defs>
+    <linearGradient id="bgF" x1="72" y1="42" x2="438" y2="470">
+      <stop stop-color="#050a12"/>
+      <stop offset=".58" stop-color="#101827"/>
+      <stop offset="1" stop-color="#1b3a46"/>
+    </linearGradient>
+    <linearGradient id="accentF" x1="146" y1="116" x2="370" y2="398">
+      <stop stop-color="#5b95ff"/>
+      <stop offset=".52" stop-color="#18a498"/>
+      <stop offset="1" stop-color="#d29a3f"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bgF)"/>
+  <rect x="140" y="86" width="232" height="340" rx="48" fill="#f4f8ff"/>
+  <path d="M312 86v70c0 22 18 40 40 40h20" fill="#dbe5f2"/>
+  <rect x="178" y="172" width="156" height="18" rx="9" fill="#101827"/>
+  <rect x="178" y="220" width="116" height="14" rx="7" fill="#9aa7ba"/>
+  <rect x="178" y="254" width="142" height="14" rx="7" fill="#c6cfdd"/>
+  <rect x="178" y="288" width="94" height="14" rx="7" fill="#c6cfdd"/>
+  <path d="M180 356h152" stroke="url(#accentF)" stroke-width="34" stroke-linecap="round"/>
+  <path d="M208 356l32 32 72-86" fill="none" stroke="#101827" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

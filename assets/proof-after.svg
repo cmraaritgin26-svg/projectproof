@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#bfdbfe"/>
+      <stop offset="1" stop-color="#fff7ed"/>
+    </linearGradient>
+    <linearGradient id="ground" x1="0" x2="1">
+      <stop stop-color="#3f6212"/>
+      <stop offset="1" stop-color="#84cc16"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="620" fill="url(#sky)"/>
+  <rect y="390" width="900" height="230" fill="url(#ground)"/>
+  <rect x="96" y="166" width="708" height="250" rx="18" fill="#f8fafc"/>
+  <rect x="126" y="196" width="160" height="145" rx="12" fill="#60a5fa"/>
+  <rect x="316" y="196" width="160" height="145" rx="12" fill="#60a5fa"/>
+  <rect x="506" y="196" width="160" height="145" rx="12" fill="#60a5fa"/>
+  <path d="M96 496c118-80 221-58 338-37 125 23 222 18 370-52v213H96z" fill="#166534" opacity=".9"/>
+  <path d="M120 466c85 31 154 30 225-3 84-39 145-40 227-10 84 30 166 24 246-17" fill="none" stroke="#bbf7d0" stroke-width="26" stroke-linecap="round"/>
+  <circle cx="742" cy="112" r="46" fill="#facc15"/>
+  <rect x="40" y="42" width="170" height="58" rx="29" fill="#1f5eff" opacity=".9"/>
+  <text x="72" y="79" fill="#fff" font-family="Arial" font-size="26" font-weight="700">AFTER</text>
+</svg>

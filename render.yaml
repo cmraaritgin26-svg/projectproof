@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: projectproof-ocr
+    env: node
+    plan: starter
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: GOOGLE_SERVICE_ACCOUNT_JSON
+        sync: false
+      - key: APP_ALLOWED_ORIGINS
+        value: capacitor://localhost,ionic://localhost,http://localhost,http://localhost:8080
+      - key: MAX_IMAGE_CHARS
+        value: "9000000"

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#cffafe"/>
+      <stop offset="1" stop-color="#f8fafc"/>
+    </linearGradient>
+    <linearGradient id="ground" x1="0" x2="1">
+      <stop stop-color="#c9b38f"/>
+      <stop offset="1" stop-color="#ead7b7"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="620" fill="url(#sky)"/>
+  <rect y="386" width="900" height="234" fill="url(#ground)"/>
+  <rect x="96" y="166" width="708" height="250" rx="18" fill="#e2e8f0"/>
+  <rect x="126" y="196" width="160" height="145" rx="12" fill="#93c5fd"/>
+  <rect x="316" y="196" width="160" height="145" rx="12" fill="#93c5fd"/>
+  <rect x="506" y="196" width="160" height="145" rx="12" fill="#93c5fd"/>
+  <path d="M120 474c120-42 205-3 305-20 116-20 178-59 334-13 48 14 74 20 101 16v163H120z" fill="#8b5e34" opacity=".7"/>
+  <rect x="146" y="430" width="112" height="70" rx="10" fill="#1f2937"/>
+  <path d="M178 430h48l25-62h-98z" fill="#f59e0b"/>
+  <rect x="620" y="424" width="132" height="42" rx="8" fill="#0f766e"/>
+  <rect x="642" y="380" width="18" height="96" rx="9" fill="#334155"/>
+  <rect x="40" y="42" width="214" height="58" rx="29" fill="#0f766e" opacity=".9"/>
+  <text x="72" y="79" fill="#fff" font-family="Arial" font-size="26" font-weight="700">PROGRESS</text>
+</svg>
