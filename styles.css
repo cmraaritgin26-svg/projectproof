@@ -706,6 +706,32 @@ h1 {
   margin-bottom: 10px;
 }
 
+.estimate-panel {
+  margin-bottom: 10px;
+}
+
+.estimate-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) 150px;
+  gap: 10px;
+}
+
+.estimate-scope-field {
+  grid-column: 1 / -1;
+}
+
+.estimate-scope-field textarea {
+  min-height: 92px;
+}
+
+.estimate-actions {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+}
+
 .market-tools {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr);
@@ -715,6 +741,107 @@ h1 {
 
 .portal-panel {
   grid-column: 1 / -1;
+}
+
+.client-portal-card {
+  display: grid;
+  gap: 10px;
+  border: 1px solid rgba(127, 180, 255, 0.16);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(45, 101, 216, 0.12), rgba(19, 143, 134, 0.1)),
+    rgba(5, 10, 18, 0.42);
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.portal-progress-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.portal-progress-head strong,
+.portal-progress-head span,
+.portal-metrics span,
+.portal-metrics strong,
+.portal-scope span,
+.portal-scope p {
+  display: block;
+}
+
+.portal-progress-head strong {
+  color: #f8fbff;
+  font-size: 1.2rem;
+}
+
+.portal-progress-head span {
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 850;
+}
+
+.portal-progress-head > span {
+  border: 1px solid rgba(127, 180, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #cfe2ff;
+  padding: 6px 9px;
+}
+
+.portal-progress-bar {
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(226, 235, 247, 0.1);
+}
+
+.portal-progress-bar i {
+  display: block;
+  height: 100%;
+  min-width: 4px;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--blue), var(--teal));
+}
+
+.portal-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.portal-metrics article {
+  border: 1px solid rgba(226, 235, 247, 0.1);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.045);
+  padding: 9px;
+}
+
+.portal-metrics span,
+.portal-scope span {
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.portal-metrics strong {
+  margin-top: 5px;
+  color: var(--ink);
+  font-size: 1.05rem;
+}
+
+.portal-scope {
+  border-top: 1px solid rgba(226, 235, 247, 0.1);
+  padding-top: 9px;
+}
+
+.portal-scope p {
+  margin-top: 5px;
+  color: #d5deeb;
+  font-size: 0.86rem;
+  line-height: 1.42;
 }
 
 .business-form {
@@ -1037,6 +1164,7 @@ dialog::backdrop {
   .proof-strip,
   .photo-grid,
   .record-edit-form,
+  .estimate-form,
   .market-tools,
   .two-column {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1122,6 +1250,9 @@ dialog::backdrop {
   .ai-panel,
   .photo-grid,
   .record-edit-form,
+  .estimate-form,
+  .estimate-actions,
+  .portal-metrics,
   .market-tools,
   .receipt-body,
   .two-column,

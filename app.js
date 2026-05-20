@@ -87,6 +87,19 @@ projectDetail.addEventListener("click", async (event) => {
     project.type = document.querySelector("#projectTypeEdit").value;
   }
 
+  if (action === "save-estimate") {
+    project.estimate = {
+      title: document.querySelector("#estimateTitleInput").value.trim(),
+      amount: Number(document.querySelector("#estimateAmountInput").value) || 0,
+      scope: document.querySelector("#estimateScopeInput").value.trim()
+    };
+  }
+
+  if (action === "dictate-estimate") {
+    startEstimateDictation(project);
+    return;
+  }
+
   if (action === "save-business-profile") {
     businessProfile = {
       name: document.querySelector("#businessNameInput").value.trim(),
@@ -298,6 +311,8 @@ function createProject({ name, client, type }) {
     receiptDraft: "",
     receiptVendor: "",
     receiptTotal: "",
+    estimate: { title: "", amount: 0, scope: "" },
+    estimateDictationStatus: "",
     notes: "",
     aiDraft: ""
   };
@@ -354,6 +369,9 @@ function renderProjectDetail() {
     `;
     return;
   }
+  const progress = getProjectProgress(project);
+  const estimate = getProjectEstimate(project);
+  const invoiceTotal = getInvoiceTotal(project);
 
   projectDetail.innerHTML = `
     <div class="detail-header">
@@ -438,6 +456,33 @@ function renderProjectDetail() {
         </div>
       </section>
     </div>
+    <section class="panel-box estimate-panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Client estimate</p>
+          <h3>Estimate and scope</h3>
+        </div>
+        <button class="secondary-button" data-action="save-estimate" type="button">Save estimate</button>
+      </div>
+      <div class="estimate-form">
+        <label>
+          <span>Estimate title</span>
+          <input id="estimateTitleInput" type="text" value="${escapeHtml(estimate.title)}" placeholder="Room paint, yard cleanup, wall repair">
+        </label>
+        <label>
+          <span>Estimate amount</span>
+          <input id="estimateAmountInput" type="number" min="0" step="0.01" value="${estimate.amount || ""}" placeholder="0.00">
+        </label>
+        <label class="estimate-scope-field">
+          <span>Scope shown to client</span>
+          <textarea id="estimateScopeInput" placeholder="Estimated room size, yard area, wall space, materials, labor assumptions">${escapeHtml(estimate.scope)}</textarea>
+        </label>
+        <div class="estimate-actions">
+          <button class="secondary-button" data-action="dictate-estimate" type="button">Dictate estimate</button>
+          <p class="feature-note">${escapeHtml(project.estimateDictationStatus || "Use voice-to-text to fill the estimate scope while walking the job.")}</p>
+        </div>
+      </div>
+    </section>
     <section class="market-tools">
       <section class="panel-box business-panel">
         <div class="section-head">
@@ -501,11 +546,30 @@ function renderProjectDetail() {
         <div class="section-head">
           <div>
             <p class="eyebrow">Client portal</p>
-            <h3>Share packet</h3>
+            <h3>Client view</h3>
           </div>
           <button class="secondary-button" data-action="copy-client-portal" type="button">Copy</button>
         </div>
-        <p class="feature-note">Creates a clean client-ready packet with status, photos, notes, hours, costs, and handoff language. A hosted portal can replace this copy once your backend is live.</p>
+        <div class="client-portal-card">
+          <div class="portal-progress-head">
+            <div>
+              <strong>${progress.percent}% complete</strong>
+              <span>${progress.completed}/${progress.total} checklist items finished</span>
+            </div>
+            <span>${escapeHtml(project.status === "complete" ? "Complete" : "In progress")}</span>
+          </div>
+          <div class="portal-progress-bar"><i style="width:${progress.percent}%"></i></div>
+          <div class="portal-metrics">
+            <article><span>Estimate</span><strong>${formatMoney(estimate.amount)}</strong></article>
+            <article><span>Current invoice</span><strong>${formatMoney(invoiceTotal)}</strong></article>
+            <article><span>Hours</span><strong>${formatNumber(project.hours)}</strong></article>
+          </div>
+          <div class="portal-scope">
+            <span>Scope</span>
+            <p>${escapeHtml(estimate.scope || "No estimate scope saved yet.")}</p>
+          </div>
+        </div>
+        <p class="feature-note">This is the client-facing view: estimate, current invoice total, and project progress from your checklist.</p>
         <pre class="portal-preview">${escapeHtml(buildClientPortalPacket(project))}</pre>
       </section>
     </section>
@@ -585,8 +649,32 @@ function getCompletedChecks(project) {
   return project.checklist.filter((item) => item.done).length;
 }
 
+function getProjectProgress(project) {
+  const total = Math.max(project.checklist.length, 1);
+  const completed = getCompletedChecks(project);
+  return {
+    completed,
+    total,
+    percent: Math.round((completed / total) * 100)
+  };
+}
+
 function getMaterialsTotal(project) {
   return project.materials.reduce((sum, item) => sum + Number(item.cost || 0), 0);
+}
+
+function getInvoiceTotal(project) {
+  return getMaterialsTotal(project);
+}
+
+function getProjectEstimate(project) {
+  return project.estimate && typeof project.estimate === "object"
+    ? {
+        title: project.estimate.title || "",
+        amount: Number(project.estimate.amount || 0),
+        scope: project.estimate.scope || ""
+      }
+    : { title: "", amount: 0, scope: "" };
 }
 
 function buildReport(project) {
@@ -615,11 +703,17 @@ ${project.notes || "No notes added."}`;
 function buildClientPortalPacket(project) {
   const photos = STAGES.filter((stage) => project.photos?.[stage]).map((stage) => stage[0].toUpperCase() + stage.slice(1));
   const businessLine = businessProfile.name ? `${businessProfile.name}\n` : "";
+  const progress = getProjectProgress(project);
+  const estimate = getProjectEstimate(project);
   return `${businessLine}${project.name}
 Client/location: ${project.client || "Not set"}
 Status: ${project.status === "complete" ? "Complete" : "Active"}
+Progress: ${progress.percent}% (${progress.completed}/${progress.total} checklist items complete)
+Estimate: ${estimate.title || "Not titled"} - ${formatMoney(estimate.amount)}
+Estimate scope: ${estimate.scope || "Not set"}
 Hours: ${formatNumber(project.hours)}
-Costs: ${formatMoney(getMaterialsTotal(project))}
+Current invoice total: ${formatMoney(getInvoiceTotal(project))}
+Materials: ${formatMoney(getMaterialsTotal(project))}
 Photos attached: ${photos.length ? photos.join(", ") : "None yet"}
 
 Client handoff:
@@ -654,6 +748,56 @@ Work was documented with photo proof, project notes, checklist progress, and log
 function buildAiNote(project) {
   const photoCount = STAGES.filter((stage) => project.photos?.[stage]).length;
   return `Work documented for ${project.name}. ${photoCount}/3 photo stages are attached. Logged ${formatNumber(project.hours)} hours and ${formatMoney(getMaterialsTotal(project))} in materials. Checklist progress is ${getCompletedChecks(project)}/${project.checklist.length}. Review open checklist items and capture final proof before closing the job.`;
+}
+
+function startEstimateDictation(project) {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    project.estimateDictationStatus = "Voice dictation is not available on this device. Use the keyboard microphone if your keyboard supports it.";
+    saveProjects();
+    render();
+    return;
+  }
+
+  const scopeInput = document.querySelector("#estimateScopeInput");
+  const recognition = new SpeechRecognition();
+  recognition.lang = navigator.language || "en-US";
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+  project.estimateDictationStatus = "Listening...";
+  saveProjects();
+  render();
+
+  recognition.onresult = (event) => {
+    const spokenText = Array.from(event.results)
+      .map((result) => result[0]?.transcript || "")
+      .join(" ")
+      .trim();
+    const currentText = scopeInput?.value?.trim() || getProjectEstimate(project).scope;
+    project.estimate = {
+      ...getProjectEstimate(project),
+      scope: [currentText, spokenText].filter(Boolean).join(currentText && spokenText ? "\n" : "")
+    };
+    project.estimateDictationStatus = "Dictation added to estimate.";
+    saveProjects();
+    render();
+  };
+
+  recognition.onerror = () => {
+    project.estimateDictationStatus = "Dictation stopped. Check microphone permission and try again.";
+    saveProjects();
+    render();
+  };
+
+  recognition.onend = () => {
+    if (project.estimateDictationStatus === "Listening...") {
+      project.estimateDictationStatus = "Dictation ended with no text captured.";
+      saveProjects();
+      render();
+    }
+  };
+
+  recognition.start();
 }
 
 async function readReceiptWithOcr(project) {
