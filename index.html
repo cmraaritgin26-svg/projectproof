@@ -27,23 +27,25 @@
 
     <section class="hero-panel" aria-label="ProjectProof overview">
       <div class="hero-copy">
-        <p class="eyebrow">Built for small service pros</p>
-        <h2>Send proof of work.</h2>
-        <p>Create a client-ready document in minutes</p>
+        <p class="eyebrow">Today</p>
+        <h2>Work dashboard</h2>
+        <p>Create proof reports, scan receipts, and send client-ready invoices.</p>
         <div class="hero-proof-row" aria-label="Proof stages preview">
-          <img src="assets/proof-before-real.png" alt="">
-          <img src="assets/proof-progress-real.png" alt="">
-          <img src="assets/proof-after-real.png" alt="">
+          <article><img src="assets/proof-before-real.png" alt=""><span>Before</span></article>
+          <article><img src="assets/proof-progress-real.png" alt=""><span>Progress</span></article>
+          <article><img src="assets/proof-after-real.png" alt=""><span>After</span></article>
         </div>
         <div class="hero-actions">
-          <button class="primary-button hero-new-button" type="button">Create proof report</button>
+          <button class="primary-button hero-new-button" type="button">New report</button>
+          <a class="secondary-link" href="#projectDetail">Open record</a>
         </div>
       </div>
-      <div class="hero-image-wrap">
-        <img src="assets/project-hero.png" alt="A worker documenting a completed project with a phone">
-        <div class="hero-status-card" aria-hidden="true">
-          <div><span>Proof score</span><strong>92%</strong></div>
-          <div class="status-bars"><i></i><i></i><i></i></div>
+      <div class="app-status-panel">
+        <div class="status-ring"><strong>92%</strong><span>Proof score</span></div>
+        <div class="app-status-list">
+          <p><span></span>Photos, hours, notes, and costs in one record</p>
+          <p><span></span>Receipt OCR connected through Render</p>
+          <p><span></span>PDF invoice and client handoff ready</p>
         </div>
       </div>
     </section>
@@ -91,6 +93,12 @@
       <section class="project-detail" id="projectDetail" aria-live="polite"></section>
     </section>
   </main>
+
+  <nav class="bottom-app-nav" aria-label="Primary actions">
+    <a href="#projectList">Records</a>
+    <button class="primary-button hero-new-button" type="button">New</button>
+    <a href="#projectDetail">Details</a>
+  </nav>
 
   <dialog id="projectDialog">
     <form class="dialog-panel" id="projectForm">

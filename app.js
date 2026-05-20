@@ -11,7 +11,7 @@ const projectForm = document.querySelector("#projectForm");
 const projectName = document.querySelector("#projectName");
 const projectClient = document.querySelector("#projectClient");
 const projectType = document.querySelector("#projectType");
-const heroNewButton = document.querySelector(".hero-new-button");
+const heroNewButtons = document.querySelectorAll(".hero-new-button");
 const closeProjectDialog = document.querySelector("#closeProjectDialog");
 
 let projects = loadProjects();
@@ -26,9 +26,9 @@ newProjectButton.addEventListener("click", () => {
   openProjectDialog();
 });
 
-heroNewButton?.addEventListener("click", () => {
+heroNewButtons.forEach((button) => button.addEventListener("click", () => {
   openProjectDialog();
-});
+}));
 
 closeProjectDialog?.addEventListener("click", () => {
   projectDialog.close();
