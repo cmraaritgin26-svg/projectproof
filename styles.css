@@ -479,6 +479,7 @@ h1 {
   grid-template-columns: minmax(238px, 0.34fr) minmax(0, 1fr);
   gap: 10px;
   align-items: start;
+  scroll-behavior: smooth;
 }
 
 .project-list-panel,
@@ -1171,11 +1172,32 @@ dialog::backdrop {
   }
 
   .workspace {
-    grid-template-columns: 1fr;
+    display: flex;
+    gap: 10px;
+    align-items: stretch;
+    margin-inline: -10px;
+    overflow-x: auto;
+    padding: 0 10px 4px;
+    scroll-padding-inline: 10px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .workspace::-webkit-scrollbar {
+    display: none;
   }
 
   .project-list-panel {
     position: static;
+  }
+
+  .project-list-panel,
+  .project-detail {
+    flex: 0 0 min(520px, calc(100vw - 20px));
+    max-width: min(520px, calc(100vw - 20px));
+    min-height: 560px;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
   }
 }
 
@@ -1233,16 +1255,8 @@ dialog::backdrop {
   }
 
   .project-list {
-    display: flex;
+    display: grid;
     gap: 8px;
-    overflow-x: auto;
-    padding-bottom: 2px;
-    scroll-snap-type: x proximity;
-  }
-
-  .project-button {
-    min-width: 225px;
-    scroll-snap-align: start;
   }
 
   .summary-grid,

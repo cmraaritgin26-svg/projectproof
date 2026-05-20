@@ -61,7 +61,7 @@ projectList.addEventListener("click", (event) => {
   if (!button) return;
   activeProjectId = button.dataset.projectId;
   render();
-  document.querySelector("#recordEditor")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  projectDetail.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
 });
 
 projectDetail.addEventListener("click", async (event) => {
