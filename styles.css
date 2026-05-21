@@ -901,12 +901,11 @@ h1 {
 
 .tool-copy {
   grid-area: copy;
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 2px 5px;
+  display: grid;
+  justify-items: center;
+  gap: 2px;
   min-width: 0;
+  text-align: center;
 }
 
 .tool-copy strong,
@@ -918,7 +917,6 @@ h1 {
 }
 
 .tool-copy strong {
-  flex: 0 0 auto;
   font-size: 0.72rem;
   line-height: 1.05;
 }
