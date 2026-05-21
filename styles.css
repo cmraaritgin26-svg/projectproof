@@ -1182,6 +1182,7 @@ dialog::backdrop {
 }
 
 .details-dialog-panel,
+.records-dialog-panel,
 .work-record-dialog-panel,
 .invoice-dialog-panel,
 .tool-dialog-panel {

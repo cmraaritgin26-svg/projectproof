@@ -7,6 +7,7 @@ const projectList = document.querySelector("#projectList");
 const activeRecordSummary = document.querySelector("#activeRecordSummary");
 const projectDetail = document.querySelector("#projectDetail");
 const newProjectButton = document.querySelector("#newProjectButton");
+const recordsButton = document.querySelector("#recordsButton");
 const settingsButton = document.querySelector("#settingsButton");
 const settingsDialog = document.querySelector("#settingsDialog");
 const settingsForm = document.querySelector("#settingsForm");
@@ -17,6 +18,8 @@ const projectForm = document.querySelector("#projectForm");
 const detailsButton = document.querySelector("#detailsButton");
 const detailsDialog = document.querySelector("#detailsDialog");
 const closeDetailsDialog = document.querySelector("#closeDetailsDialog");
+const recordsDialog = document.querySelector("#recordsDialog");
+const closeRecordsDialog = document.querySelector("#closeRecordsDialog");
 const workRecordDialog = document.querySelector("#workRecordDialog");
 const workRecordForm = document.querySelector("#workRecordForm");
 const workRecordDialogFields = document.querySelector("#workRecordDialogFields");
@@ -72,6 +75,10 @@ detailsButton?.addEventListener("click", () => {
   openDetailsDialog();
 });
 
+recordsButton?.addEventListener("click", () => {
+  openRecordsDialog();
+});
+
 heroNewButtons.forEach((button) => button.addEventListener("click", () => {
   openProjectDialog();
 }));
@@ -90,6 +97,10 @@ closeEstimateDialog?.addEventListener("click", () => {
 
 closeDetailsDialog?.addEventListener("click", () => {
   detailsDialog.close();
+});
+
+closeRecordsDialog?.addEventListener("click", () => {
+  recordsDialog.close();
 });
 
 closeWorkRecordDialog?.addEventListener("click", () => {
@@ -147,6 +158,10 @@ function openEstimateDialog() {
 function openDetailsDialog() {
   if (!getActiveProject()) return;
   detailsDialog.showModal();
+}
+
+function openRecordsDialog() {
+  recordsDialog.showModal();
 }
 
 function openWorkRecordDialog() {
