@@ -236,10 +236,17 @@ async function handleToolDialogClick(event) {
   }
   if (action === "generate-ai") {
     project.aiDraft = buildAiDraft(project);
+    project.aiDraftStatus = "Client report written. Review it below, then copy it or use it as notes.";
+  }
+  if (action === "copy-ai-report") {
+    if (!project.aiDraft) project.aiDraft = buildAiDraft(project);
+    await copyText(project.aiDraft);
+    project.aiDraftStatus = "Client report copied.";
   }
   if (action === "use-ai-notes") {
+    if (!project.aiDraft) project.aiDraft = buildAiDraft(project);
     project.notes = buildAiNote(project);
-    project.aiDraft = buildAiDraft(project);
+    project.aiDraftStatus = "Client report saved into notes.";
   }
   if (action === "save-notes") {
     project.notes = document.querySelector("#notesInput")?.value.trim() || "";
@@ -519,11 +526,19 @@ projectDetail.addEventListener("click", async (event) => {
 
   if (action === "generate-ai") {
     project.aiDraft = buildAiDraft(project);
+    project.aiDraftStatus = "Client report written. Review it below, then copy it or use it as notes.";
   }
 
   if (action === "use-ai-notes") {
+    if (!project.aiDraft) project.aiDraft = buildAiDraft(project);
     project.notes = buildAiNote(project);
-    project.aiDraft = buildAiDraft(project);
+    project.aiDraftStatus = "Client report saved into notes.";
+  }
+
+  if (action === "copy-ai-report") {
+    if (!project.aiDraft) project.aiDraft = buildAiDraft(project);
+    await copyText(project.aiDraft);
+    project.aiDraftStatus = "Client report copied.";
   }
 
   if (action === "copy-report") {
@@ -696,7 +711,8 @@ function createProject({ name, client, type }) {
     estimateDictationStatus: "",
     aiChecklistStatus: "",
     notes: "",
-    aiDraft: ""
+    aiDraft: "",
+    aiDraftStatus: ""
   };
 }
 
@@ -1004,6 +1020,7 @@ function renderReceiptContent(project) {
 }
 
 function renderAiContent(project) {
+  const output = project.aiDraft || "Tap Write report to generate client-ready handoff language for this job.";
   return `
     <div class="ai-panel dialog-ai-panel">
       <div class="ai-heading">
@@ -1011,9 +1028,11 @@ function renderAiContent(project) {
       </div>
       <div class="ai-actions">
         <button class="primary-button" data-action="generate-ai" type="button">Write report</button>
+        <button class="secondary-button" data-action="copy-ai-report" type="button">Copy report</button>
         <button class="secondary-button" data-action="use-ai-notes" type="button">Use as notes</button>
       </div>
-      <pre class="ai-output">${escapeHtml(project.aiDraft || buildAiDraft(project))}</pre>
+      ${project.aiDraftStatus ? `<p class="feature-note">${escapeHtml(project.aiDraftStatus)}</p>` : ""}
+      <pre class="ai-output">${escapeHtml(output)}</pre>
     </div>
   `;
 }
@@ -1784,7 +1803,11 @@ function formatDate(date) {
 
 async function copyReport(project) {
   const report = buildReport(project);
-  await navigator.clipboard?.writeText(report).catch(() => {});
+  await copyText(report);
+}
+
+async function copyText(text) {
+  await navigator.clipboard?.writeText(text).catch(() => {});
 }
 
 function fileToDataUrl(file) {
