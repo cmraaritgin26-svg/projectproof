@@ -552,7 +552,6 @@ function renderProjectDetail() {
     </section>
     <section class="handoff-swipe" aria-label="AI and handoff">
       <section class="ai-panel">
-        <div class="ai-orb" aria-hidden="true">AI</div>
         <div class="ai-heading">
           <p class="eyebrow">ProjectProof AI</p>
           <h3>Client report writer</h3>

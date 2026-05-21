@@ -230,6 +230,10 @@ h1 {
   scroll-snap-stop: always;
 }
 
+.work-swipe > .record-edit-panel {
+  flex-basis: min(420px, 92vw);
+}
+
 .hero-panel {
   position: relative;
   display: grid;
@@ -909,7 +913,7 @@ h1 {
 
 .ai-panel {
   display: grid;
-  grid-template-columns: 48px minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 12px;
   align-items: start;
   margin-bottom: 0;
@@ -920,18 +924,6 @@ h1 {
     rgba(16, 24, 39, 0.96);
   box-shadow: var(--shadow-soft);
   padding: 12px;
-}
-
-.ai-orb {
-  display: grid;
-  place-items: center;
-  width: 46px;
-  height: 46px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, var(--navy), var(--blue-dark));
-  color: #fff;
-  font-weight: 950;
-  box-shadow: 0 10px 18px rgba(16, 24, 39, 0.18);
 }
 
 .ai-heading {
@@ -1210,13 +1202,13 @@ dialog::backdrop {
   .home-swipe > .project-list-panel {
     flex: 0 0 min(520px, calc(100vw - 20px));
     max-width: min(520px, calc(100vw - 20px));
-    min-height: 560px;
+    min-height: 0;
     scroll-snap-align: start;
     scroll-snap-stop: always;
   }
 
   .project-detail {
-    min-height: 560px;
+    min-height: 0;
   }
 }
 
