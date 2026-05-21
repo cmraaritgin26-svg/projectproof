@@ -151,13 +151,13 @@ h1 {
 }
 
 .top-records-button {
-  min-height: 26px;
-  padding: 0 7px;
+  min-height: 32px;
+  padding: 0 9px;
   border: 1px solid rgba(226, 235, 247, 0.14);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.055)),
     rgba(255, 255, 255, 0.07);
-  font-size: 0.62rem;
+  font-size: 0.68rem;
   box-shadow: 0 10px 22px rgba(0, 0, 0, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
@@ -211,15 +211,15 @@ h1 {
 .icon-button {
   display: grid;
   place-items: center;
-  width: 32px;
-  height: 32px;
+  width: 38px;
+  height: 38px;
   flex: 0 0 auto;
   border: 1px solid rgba(255, 255, 255, 0.2);
   background:
     linear-gradient(135deg, #ffca68, #d8962f 58%, #a96f18),
     #d8962f;
   color: #121a29;
-  font-size: 1.02rem;
+  font-size: 1.24rem;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.24), inset 0 -1px 0 rgba(0, 0, 0, 0.22);
 }
 
@@ -718,19 +718,19 @@ h1 {
 .secondary-button,
 .danger-button {
   border: 1px solid transparent;
-  min-height: 28px;
-  padding: 0 8px;
-  font-size: 0.68rem;
+  min-height: 34px;
+  padding: 0 10px;
+  font-size: 0.78rem;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.16);
 }
 
 .detail-actions .primary-button,
 .detail-actions .secondary-button,
 .detail-actions .danger-button {
-  min-height: 24px;
-  padding: 0 6px;
-  border-radius: 6px;
-  font-size: 0.6rem;
+  min-height: 28px;
+  padding: 0 8px;
+  border-radius: 7px;
+  font-size: 0.68rem;
   line-height: 1.05;
 }
 
@@ -849,12 +849,11 @@ h1 {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   grid-template-areas:
-    "step copy"
-    "step tag";
+    "step copy";
   align-items: center;
   column-gap: 5px;
   row-gap: 2px;
-  min-height: 38px;
+  min-height: 32px;
   border: 1px solid rgba(226, 235, 247, 0.14);
   border-radius: 8px;
   background:
@@ -862,7 +861,7 @@ h1 {
     linear-gradient(180deg, rgba(31, 45, 68, 0.92), rgba(9, 15, 25, 0.96)),
     var(--surface);
   color: var(--ink);
-  padding: 5px;
+  padding: 4px 5px;
   text-align: left;
   box-shadow:
     0 12px 26px rgba(0, 0, 0, 0.2),
@@ -902,8 +901,9 @@ h1 {
 
 .tool-copy {
   grid-area: copy;
-  display: grid;
-  gap: 1px;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
   min-width: 0;
 }
 
@@ -916,19 +916,24 @@ h1 {
 }
 
 .tool-copy strong {
-  font-size: 0.64rem;
+  flex: 0 0 auto;
+  font-size: 0.62rem;
   line-height: 1.05;
 }
 
 .tool-copy small {
   color: var(--muted);
-  font-size: 0.54rem;
+  font-size: 0.5rem;
   font-weight: 800;
   line-height: 1.15;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .tool-tag {
   grid-area: tag;
+  display: none;
   justify-self: start;
   border: 1px solid rgba(159, 229, 221, 0.16);
   border-radius: 999px;
@@ -1013,19 +1018,19 @@ h1 {
 .stage-button {
   display: inline-grid;
   place-items: center;
-  min-height: 26px;
+  min-height: 32px;
   border: 1px solid rgba(127, 180, 255, 0.2);
   background:
     linear-gradient(180deg, rgba(127, 180, 255, 0.22), rgba(45, 101, 216, 0.13)),
     rgba(127, 180, 255, 0.14);
   color: #cfe2ff;
-  padding: 0 7px;
-  font-size: 0.66rem;
+  padding: 0 9px;
+  font-size: 0.76rem;
   box-shadow: 0 10px 22px rgba(45, 101, 216, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .estimate-photo-button {
-  min-height: 26px;
+  min-height: 32px;
 }
 
 .two-column {
@@ -1425,26 +1430,26 @@ dialog::backdrop {
   border-top: 1px solid rgba(226, 235, 247, 0.12);
   background: rgba(7, 12, 20, 0.96);
   backdrop-filter: blur(16px);
-  padding: 6px 10px 8px;
+  padding: 9px 12px 11px;
 }
 
 .bottom-app-nav a,
 .bottom-app-nav .nav-button {
   display: grid;
   place-items: center;
-  min-height: 30px;
+  min-height: 38px;
   border: 0;
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.06);
   color: var(--muted);
-  font-size: 0.68rem;
+  font-size: 0.78rem;
   font-weight: 900;
   text-decoration: none;
 }
 
 .bottom-app-nav .primary-button {
-  min-width: 62px;
-  min-height: 32px;
+  min-width: 78px;
+  min-height: 40px;
 }
 
 @media (max-width: 880px) {
@@ -1591,13 +1596,11 @@ dialog::backdrop {
   }
 
   .tool-tile-button {
-    grid-template-columns: 1fr;
+    grid-template-columns: auto minmax(0, 1fr);
     grid-template-areas:
-      "step"
-      "copy"
-      "tag";
-    align-content: start;
-    min-height: 58px;
+      "step copy";
+    align-content: center;
+    min-height: 34px;
   }
 
   .work-swipe > .panel-box,
