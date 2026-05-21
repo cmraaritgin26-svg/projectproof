@@ -415,34 +415,42 @@ function renderProjectDetail() {
       <span>${formatMoney(getMaterialsTotal(project))} materials</span>
       <span>${getCompletedChecks(project)}/${project.checklist.length} checklist</span>
     </div>
-    <section class="panel-box record-edit-panel" id="recordEditor">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Work record</p>
-          <h3>Edit information</h3>
+    <section class="work-swipe" aria-label="Work capture">
+      <section class="panel-box record-edit-panel" id="recordEditor">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Work record</p>
+            <h3>Edit information</h3>
+          </div>
+          <button class="secondary-button" data-action="save-project-info" type="button">Save changes</button>
         </div>
-        <button class="secondary-button" data-action="save-project-info" type="button">Save changes</button>
-      </div>
-      <div class="record-edit-form">
-        <label>
-          <span>Project name</span>
-          <input id="projectNameEdit" type="text" value="${escapeHtml(project.name)}">
-        </label>
-        <label>
-          <span>Client or location</span>
-          <input id="projectClientEdit" type="text" value="${escapeHtml(project.client || "")}" placeholder="Client, address, or job site">
-        </label>
-        <label>
-          <span>Job type</span>
-          <select id="projectTypeEdit">${renderTypeOptions(project.type)}</select>
-        </label>
-      </div>
-    </section>
-    <div class="photo-grid">
-      ${STAGES.map((stage) => renderPhotoCard(project, stage)).join("")}
-    </div>
-    <div class="two-column checklist-row">
-      <section class="panel-box">
+        <div class="record-edit-form">
+          <label>
+            <span>Project name</span>
+            <input id="projectNameEdit" type="text" value="${escapeHtml(project.name)}">
+          </label>
+          <label>
+            <span>Client or location</span>
+            <input id="projectClientEdit" type="text" value="${escapeHtml(project.client || "")}" placeholder="Client, address, or job site">
+          </label>
+          <label>
+            <span>Job type</span>
+            <select id="projectTypeEdit">${renderTypeOptions(project.type)}</select>
+          </label>
+        </div>
+      </section>
+      <section class="panel-box photos-panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Proof photos</p>
+            <h3>Before, progress, after</h3>
+          </div>
+        </div>
+        <div class="photo-grid">
+          ${STAGES.map((stage) => renderPhotoCard(project, stage)).join("")}
+        </div>
+      </section>
+      <section class="panel-box checklist-panel">
         <div class="section-head">
           <div>
           <p class="eyebrow">Proof checklist</p>
@@ -457,7 +465,7 @@ function renderProjectDetail() {
           <button class="secondary-button" data-action="add-check" type="button">Add</button>
         </div>
       </section>
-    </div>
+    </section>
     <section class="tool-swipe" aria-label="Estimate invoice and receipt tools">
       <section class="panel-box estimate-panel">
         <div class="section-head">
@@ -542,29 +550,31 @@ function renderProjectDetail() {
         </div>
       </section>
     </section>
-    <section class="ai-panel">
-      <div class="ai-orb" aria-hidden="true">AI</div>
-      <div class="ai-heading">
-        <p class="eyebrow">ProjectProof AI</p>
-        <h3>Client report writer</h3>
-        <p>Turn photos, costs, hours, and checklist status into professional wording for invoices, text messages, and follow-up emails.</p>
-      </div>
-      <div class="ai-actions">
-        <button class="primary-button" data-action="generate-ai" type="button">Write report</button>
-        <button class="secondary-button" data-action="use-ai-notes" type="button">Use as notes</button>
-      </div>
-      <pre class="ai-output">${escapeHtml(project.aiDraft || buildAiDraft(project))}</pre>
-    </section>
-    <section class="panel-box notes-panel">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Client handoff</p>
-          <h3>Notes and report</h3>
+    <section class="handoff-swipe" aria-label="AI and handoff">
+      <section class="ai-panel">
+        <div class="ai-orb" aria-hidden="true">AI</div>
+        <div class="ai-heading">
+          <p class="eyebrow">ProjectProof AI</p>
+          <h3>Client report writer</h3>
+          <p>Turn photos, costs, hours, and checklist status into professional wording.</p>
         </div>
-        <button class="secondary-button" data-action="save-notes" type="button">Save notes</button>
-      </div>
-      <textarea id="notesInput" placeholder="Work performed, client requests, issues found, next steps">${escapeHtml(project.notes)}</textarea>
-      <pre class="report-preview">${escapeHtml(buildReport(project))}</pre>
+        <div class="ai-actions">
+          <button class="primary-button" data-action="generate-ai" type="button">Write report</button>
+          <button class="secondary-button" data-action="use-ai-notes" type="button">Use as notes</button>
+        </div>
+        <pre class="ai-output">${escapeHtml(project.aiDraft || buildAiDraft(project))}</pre>
+      </section>
+      <section class="panel-box notes-panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Client handoff</p>
+            <h3>Notes and report</h3>
+          </div>
+          <button class="secondary-button" data-action="save-notes" type="button">Save notes</button>
+        </div>
+        <textarea id="notesInput" placeholder="Work performed, client requests, issues found, next steps">${escapeHtml(project.notes)}</textarea>
+        <pre class="report-preview">${escapeHtml(buildReport(project))}</pre>
+      </section>
     </section>
   `;
 }
