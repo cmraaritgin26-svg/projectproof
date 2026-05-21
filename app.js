@@ -262,6 +262,27 @@ async function handleToolDialogChange(event) {
     refreshOpenToolDialogs(project);
     return;
   }
+  const checkTextInput = event.target.closest("input[data-check-text-id]");
+  if (checkTextInput) {
+    const item = project.checklist.find((entry) => entry.id === checkTextInput.dataset.checkTextId);
+    if (item) item.text = checkTextInput.value.trim() || item.text;
+    saveProjects();
+    render();
+    refreshOpenToolDialogs(project);
+    return;
+  }
+  const photoInput = event.target.closest("input[data-photo-stage]");
+  if (photoInput && photoInput.files?.[0]) {
+    const stage = photoInput.dataset.photoStage;
+    project.photos[stage] = await fileToDataUrl(photoInput.files[0]);
+    if (stage === "before") {
+      generateAiChecklistFromBeforePhoto(project);
+    }
+    saveProjects();
+    render();
+    refreshOpenToolDialogs(project);
+    return;
+  }
   const receiptInput = event.target.closest("input[data-receipt-input]");
   if (receiptInput && receiptInput.files?.[0]) {
     const file = receiptInput.files[0];
@@ -538,11 +559,22 @@ projectDetail.addEventListener("change", async (event) => {
     render();
     return;
   }
+  const checkTextInput = event.target.closest("input[data-check-text-id]");
+  if (checkTextInput) {
+    const item = project.checklist.find((entry) => entry.id === checkTextInput.dataset.checkTextId);
+    if (item) item.text = checkTextInput.value.trim() || item.text;
+    saveProjects();
+    render();
+    return;
+  }
 
   const photoInput = event.target.closest("input[data-photo-stage]");
   if (photoInput && photoInput.files?.[0]) {
     const stage = photoInput.dataset.photoStage;
     project.photos[stage] = await fileToDataUrl(photoInput.files[0]);
+    if (stage === "before") {
+      generateAiChecklistFromBeforePhoto(project);
+    }
     saveProjects();
     render();
   }
@@ -662,9 +694,113 @@ function createProject({ name, client, type }) {
     receiptTotal: "",
     estimate: { title: "", amount: 0, scope: "" },
     estimateDictationStatus: "",
+    aiChecklistStatus: "",
     notes: "",
     aiDraft: ""
   };
+}
+
+function generateAiChecklistFromBeforePhoto(project) {
+  const checklist = buildAiChecklist(project);
+  const existingByText = new Map(project.checklist.map((item) => [normalizeText(item.text), item]));
+  const generatedItems = checklist.map((text) => {
+    const existing = existingByText.get(normalizeText(text));
+    return {
+      id: existing?.id || makeId(),
+      text,
+      done: existing?.done || text === "Capture before photo"
+    };
+  });
+  const generatedText = new Set(generatedItems.map((item) => normalizeText(item.text)));
+  const customItems = project.checklist.filter((item) => {
+    const text = normalizeText(item.text);
+    if (generatedText.has(text)) return false;
+    return !["capture before photo", "add work notes", "capture after photo"].includes(text);
+  });
+
+  project.checklist = [...generatedItems, ...customItems];
+  project.aiChecklistStatus = `${getChecklistSource(project.type)} checklist generated from the before photo. Edit any item before starting the job.`;
+}
+
+function buildAiChecklist(project) {
+  const type = normalizeText(project.type);
+  if (type.includes("paint")) {
+    return [
+      "Capture before photo",
+      "Protect floors, fixtures, and nearby surfaces",
+      "Patch holes, sand rough spots, and clean dust",
+      "Tape trim and edges",
+      "Prime repaired or bare areas",
+      "Apply first coat evenly",
+      "Apply finish coat and inspect coverage",
+      "Remove tape, clean work area, and capture after photo"
+    ];
+  }
+  if (type.includes("clean")) {
+    return [
+      "Capture before photo",
+      "Remove loose trash and personal items",
+      "Dust high surfaces, corners, and vents",
+      "Clean fixtures, counters, and touch points",
+      "Scrub floors or affected surfaces",
+      "Remove stains, buildup, or problem areas",
+      "Final walkthrough and capture after photo"
+    ];
+  }
+  if (type.includes("landscap")) {
+    return [
+      "Capture before photo",
+      "Clear debris, weeds, and loose material",
+      "Trim edges, shrubs, or overgrowth",
+      "Mow, level, or shape the work area",
+      "Haul away waste and sweep hard surfaces",
+      "Check irrigation, drainage, or problem spots",
+      "Final walkthrough and capture after photo"
+    ];
+  }
+  if (type.includes("handyman") || type.includes("repair") || type.includes("build")) {
+    return [
+      "Capture before photo",
+      "Confirm repair scope, measurements, and materials",
+      "Protect surrounding area before work starts",
+      "Remove damaged or loose material",
+      "Complete repair, build, or installation",
+      "Test fit, function, and stability",
+      "Clean work area and capture after photo"
+    ];
+  }
+  if (type.includes("inspect")) {
+    return [
+      "Capture before photo",
+      "Document visible condition and location",
+      "Check safety, access, and damage indicators",
+      "Capture close-up proof photos",
+      "Record measurements or readings",
+      "List recommended fixes or follow-up items",
+      "Capture final reference photo"
+    ];
+  }
+  return [
+    "Capture before photo",
+    "Confirm client scope and expected finish",
+    "Document problem areas before starting",
+    "Gather tools, materials, and measurements",
+    "Complete the main work items",
+    "Clean the work area",
+    "Review quality and open punch-list items",
+    "Capture after photo"
+  ];
+}
+
+function getChecklistSource(type) {
+  const normalized = normalizeText(type);
+  return ["paint", "clean", "landscap", "handyman", "repair", "build", "inspect"].some((keyword) => normalized.includes(keyword))
+    ? "AI job-specific"
+    : "AI generic";
+}
+
+function normalizeText(value) {
+  return String(value || "").trim().toLowerCase();
 }
 
 function makeId() {
@@ -828,6 +964,7 @@ function renderProofFlowContent() {
 function renderChecklistContent(project) {
   return `
     <div class="checklist-panel">
+      ${project.aiChecklistStatus ? `<p class="feature-note">${escapeHtml(project.aiChecklistStatus)}</p>` : ""}
       <div class="stack">
         ${project.checklist.map(renderCheckRow).join("")}
       </div>
@@ -898,10 +1035,10 @@ function renderTypeOptions(selectedType) {
 
 function renderCheckRow(item) {
   return `
-    <label class="check-row ${item.done ? "done" : ""}">
+    <div class="check-row ${item.done ? "done" : ""}">
       <input data-check-id="${escapeHtml(item.id)}" type="checkbox" ${item.done ? "checked" : ""}>
-      <span>${escapeHtml(item.text)}</span>
-    </label>
+      <input class="check-text-input" data-check-text-id="${escapeHtml(item.id)}" type="text" value="${escapeHtml(item.text)}" aria-label="Checklist item">
+    </div>
   `;
 }
 

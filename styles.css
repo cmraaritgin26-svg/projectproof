@@ -1166,13 +1166,18 @@ h1 {
   accent-color: var(--blue);
 }
 
-.check-row span {
+.check-text-input {
   flex: 1;
   min-width: 0;
+  min-height: 34px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  padding: 0;
   overflow-wrap: anywhere;
 }
 
-.check-row.done span {
+.check-row.done .check-text-input {
   color: var(--muted);
   text-decoration: line-through;
 }
