@@ -749,13 +749,20 @@ function renderProjectDetail() {
     return;
   }
   projectDetail.innerHTML = `
+    <div class="workflow-header">
+      <div>
+        <p class="eyebrow">Job flow</p>
+        <h2>Use in order</h2>
+      </div>
+      <span>${project.status === "complete" ? "Complete" : "Active record"}</span>
+    </div>
     <section class="tool-button-grid" aria-label="Project tools">
-      ${renderToolButton("open-photos", "Proof photos", `${STAGES.filter((stage) => project.photos?.[stage]).length}/3 attached`)}
-      ${renderToolButton("open-proof-flow", "Proof flow", "Before to after")}
-      ${renderToolButton("open-checklist", "Checklist", `${getCompletedChecks(project)}/${project.checklist.length} complete`)}
-      ${renderToolButton("open-receipt", "Receipt scanner", project.receiptPhoto ? "Receipt attached" : "Scan costs")}
-      ${renderToolButton("open-ai", "AI writer", "Client wording")}
-      ${renderToolButton("open-notes", "Notes/report", project.notes ? "Notes saved" : "Handoff notes")}
+      ${renderToolButton("open-photos", "Photos", "Before, progress, after", "01", "Capture")}
+      ${renderToolButton("open-checklist", "Checklist", `${getCompletedChecks(project)}/${project.checklist.length} complete`, "02", "Track")}
+      ${renderToolButton("open-receipt", "Receipts", project.receiptPhoto ? "Receipt attached" : "Scan costs", "03", "Costs")}
+      ${renderToolButton("open-ai", "AI writer", "Client wording", "04", "Handoff")}
+      ${renderToolButton("open-notes", "Report notes", project.notes ? "Notes saved" : "Final notes", "05", "Review")}
+      ${renderToolButton("open-proof-flow", "Proof flow", "Before to after", "06", "Preview")}
     </section>
   `;
 }
@@ -787,11 +794,15 @@ function renderPhotoCard(project, stage) {
   `;
 }
 
-function renderToolButton(action, label, detail) {
+function renderToolButton(action, label, detail, step, tag) {
   return `
     <button class="tool-tile-button" data-action="${escapeHtml(action)}" type="button">
-      <strong>${escapeHtml(label)}</strong>
-      <span>${escapeHtml(detail)}</span>
+      <span class="tool-step">${escapeHtml(step)}</span>
+      <span class="tool-copy">
+        <strong>${escapeHtml(label)}</strong>
+        <small>${escapeHtml(detail)}</small>
+      </span>
+      <span class="tool-tag">${escapeHtml(tag)}</span>
     </button>
   `;
 }
