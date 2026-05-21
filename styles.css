@@ -202,6 +202,7 @@ h1 {
 .tool-swipe,
 .handoff-swipe {
   display: flex;
+  align-items: flex-start;
   gap: 10px;
   margin: 0 -2px 10px;
   overflow-x: auto;
@@ -224,6 +225,7 @@ h1 {
 .handoff-swipe > .panel-box,
 .handoff-swipe > .ai-panel {
   flex: 0 0 min(560px, 92vw);
+  align-self: flex-start;
   scroll-snap-align: start;
   scroll-snap-stop: always;
 }
@@ -980,6 +982,19 @@ h1 {
   margin-bottom: 0;
 }
 
+.record-edit-panel .section-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 8px;
+}
+
+.record-edit-panel .section-head .secondary-button {
+  max-width: 100%;
+  min-width: 0;
+  white-space: nowrap;
+}
+
 .record-edit-form {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1310,6 +1325,14 @@ dialog::backdrop {
   .detail-actions .danger-button {
     min-height: 34px;
     font-size: 0.72rem;
+  }
+
+  .record-edit-panel .section-head {
+    grid-template-columns: 1fr;
+  }
+
+  .record-edit-panel .section-head .secondary-button {
+    justify-self: stretch;
   }
 
   .bottom-app-nav {
