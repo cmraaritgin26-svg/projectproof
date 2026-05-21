@@ -4,6 +4,7 @@ const DEFAULT_OCR_ENDPOINT = "https://projectproof-ocr.onrender.com/ocr/receipt"
 const STAGES = ["before", "progress", "after"];
 
 const projectList = document.querySelector("#projectList");
+const activeRecordSummary = document.querySelector("#activeRecordSummary");
 const projectDetail = document.querySelector("#projectDetail");
 const newProjectButton = document.querySelector("#newProjectButton");
 const settingsButton = document.querySelector("#settingsButton");
@@ -219,6 +220,29 @@ projectList.addEventListener("click", (event) => {
   activeProjectId = button.dataset.projectId;
   render();
   projectDetail.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+});
+
+activeRecordSummary?.addEventListener("click", async (event) => {
+  const button = event.target.closest("button[data-action]");
+  if (!button) return;
+  const project = getActiveProject();
+  if (!project) return;
+  const action = button.dataset.action;
+
+  if (action === "copy-report") {
+    await copyReport(project);
+    return;
+  }
+  if (action === "complete-project") {
+    project.status = project.status === "complete" ? "active" : "complete";
+  }
+  if (action === "delete-project") {
+    projects = projects.filter((item) => item.id !== project.id);
+    activeProjectId = projects[0]?.id || "";
+  }
+
+  saveProjects();
+  render();
 });
 
 projectDetail.addEventListener("click", async (event) => {
@@ -474,6 +498,7 @@ function getActiveProject() {
 
 function render() {
   renderSummary();
+  renderActiveRecordSummary();
   renderProjectList();
   renderProjectDetail();
 }
@@ -503,6 +528,35 @@ function renderProjectList() {
   `).join("");
 }
 
+function renderActiveRecordSummary() {
+  if (!activeRecordSummary) return;
+  const project = getActiveProject();
+  if (!project) {
+    activeRecordSummary.innerHTML = "";
+    return;
+  }
+  activeRecordSummary.innerHTML = `
+    <section class="active-record-card" aria-label="Selected work record">
+      <div>
+        <p class="eyebrow">Selected record</p>
+        <p class="detail-type">${escapeHtml(project.type)}</p>
+        <h3>${escapeHtml(project.name)}</h3>
+      </div>
+      <div class="meta-strip compact-meta">
+        <span>${escapeHtml(project.client || "No client/location")}</span>
+        <span>${formatNumber(project.hours)} hours</span>
+        <span>${formatMoney(getMaterialsTotal(project))} materials</span>
+        <span>${getCompletedChecks(project)}/${project.checklist.length} checklist</span>
+      </div>
+      <div class="detail-actions record-card-actions">
+        <button class="secondary-button" data-action="copy-report" type="button">Copy report</button>
+        <button class="primary-button" data-action="complete-project" type="button">${project.status === "complete" ? "Reopen" : "Complete"}</button>
+        <button class="danger-button" data-action="delete-project" type="button">Delete</button>
+      </div>
+    </section>
+  `;
+}
+
 function renderProjectDetail() {
   const project = getActiveProject();
   if (!project) {
@@ -516,24 +570,6 @@ function renderProjectDetail() {
     return;
   }
   projectDetail.innerHTML = `
-    <div class="detail-header">
-      <div>
-        <p class="eyebrow">Work record</p>
-        <p class="detail-type">${escapeHtml(project.type)}</p>
-        <h2>${escapeHtml(project.name)}</h2>
-      </div>
-      <div class="detail-actions">
-        <button class="secondary-button" data-action="copy-report" type="button">Copy client report</button>
-        <button class="primary-button" data-action="complete-project" type="button">${project.status === "complete" ? "Reopen" : "Mark complete"}</button>
-        <button class="danger-button" data-action="delete-project" type="button">Delete</button>
-      </div>
-    </div>
-    <div class="meta-strip">
-      <span>${escapeHtml(project.client || "No client/location")}</span>
-      <span>${formatNumber(project.hours)} hours</span>
-      <span>${formatMoney(getMaterialsTotal(project))} materials</span>
-      <span>${getCompletedChecks(project)}/${project.checklist.length} checklist</span>
-    </div>
     <section class="work-swipe" aria-label="Work capture">
       ${renderProofFlowPanel()}
       ${renderChecklistPanel(project)}

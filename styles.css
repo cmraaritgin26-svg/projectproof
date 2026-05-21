@@ -557,6 +557,33 @@ h1 {
   gap: 4px;
 }
 
+.active-record-card {
+  display: grid;
+  gap: 5px;
+  margin-bottom: 5px;
+  border: 1px solid rgba(127, 180, 255, 0.18);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(45, 101, 216, 0.16), rgba(19, 122, 116, 0.08));
+  padding: 8px;
+}
+
+.active-record-card h3 {
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.compact-meta {
+  margin-bottom: 0;
+}
+
+.record-card-actions {
+  justify-content: stretch;
+}
+
+.record-card-actions button {
+  flex: 1;
+}
+
 .project-button {
   width: 100%;
   min-height: 60px;
