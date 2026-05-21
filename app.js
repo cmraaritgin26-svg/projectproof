@@ -5,7 +5,6 @@ const STAGES = ["before", "progress", "after"];
 
 const projectList = document.querySelector("#projectList");
 const projectDetail = document.querySelector("#projectDetail");
-const overviewChecklist = document.querySelector("#overviewChecklist");
 const newProjectButton = document.querySelector("#newProjectButton");
 const settingsButton = document.querySelector("#settingsButton");
 const settingsDialog = document.querySelector("#settingsDialog");
@@ -220,32 +219,6 @@ projectList.addEventListener("click", (event) => {
   activeProjectId = button.dataset.projectId;
   render();
   projectDetail.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
-});
-
-overviewChecklist?.addEventListener("click", (event) => {
-  const button = event.target.closest("button[data-action]");
-  if (!button) return;
-  const project = getActiveProject();
-  if (!project) return;
-  if (button.dataset.action === "add-check") {
-    const input = document.querySelector("#checkInput");
-    const text = input?.value.trim() || "";
-    if (text) project.checklist.push({ id: makeId(), text, done: false });
-    if (input) input.value = "";
-    saveProjects();
-    render();
-  }
-});
-
-overviewChecklist?.addEventListener("change", (event) => {
-  const project = getActiveProject();
-  if (!project) return;
-  const checkbox = event.target.closest("input[data-check-id]");
-  if (!checkbox) return;
-  const item = project.checklist.find((entry) => entry.id === checkbox.dataset.checkId);
-  if (item) item.done = checkbox.checked;
-  saveProjects();
-  render();
 });
 
 projectDetail.addEventListener("click", async (event) => {
@@ -502,7 +475,6 @@ function getActiveProject() {
 function render() {
   renderSummary();
   renderProjectList();
-  renderOverviewChecklist();
   renderProjectDetail();
 }
 
@@ -529,38 +501,6 @@ function renderProjectList() {
       <span>${escapeHtml(project.client || "No client")} · ${escapeHtml(project.type)} · ${project.status === "complete" ? "Complete" : "Active"}</span>
     </button>
   `).join("");
-}
-
-function renderOverviewChecklist() {
-  const project = getActiveProject();
-  if (!overviewChecklist) return;
-  if (!project) {
-    overviewChecklist.innerHTML = `
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Proof checklist</p>
-          <h2>Closeout steps</h2>
-        </div>
-      </div>
-      <p class="muted">No active project.</p>
-    `;
-    return;
-  }
-  overviewChecklist.innerHTML = `
-    <div class="section-head">
-      <div>
-        <p class="eyebrow">Proof checklist</p>
-        <h2>Closeout steps</h2>
-      </div>
-    </div>
-    <div class="stack">
-      ${project.checklist.map(renderCheckRow).join("")}
-    </div>
-    <div class="quick-form">
-      <input id="checkInput" type="text" placeholder="Add checklist item">
-      <button class="secondary-button" data-action="add-check" type="button">Add</button>
-    </div>
-  `;
 }
 
 function renderProjectDetail() {
@@ -595,6 +535,8 @@ function renderProjectDetail() {
       <span>${getCompletedChecks(project)}/${project.checklist.length} checklist</span>
     </div>
     <section class="work-swipe" aria-label="Work capture">
+      ${renderProofFlowPanel()}
+      ${renderChecklistPanel(project)}
       <section class="panel-box photos-panel">
         <div class="section-head">
           <div>
@@ -607,7 +549,7 @@ function renderProjectDetail() {
         </div>
       </section>
     </section>
-    <section class="tool-swipe" aria-label="Receipt tools">
+    <section class="handoff-swipe" aria-label="Receipt and client handoff tools">
       <section class="panel-box receipt-panel">
         <div class="section-head">
           <div>
@@ -638,8 +580,6 @@ function renderProjectDetail() {
           </div>
         </div>
       </section>
-    </section>
-    <section class="handoff-swipe" aria-label="AI and handoff">
       <section class="ai-panel">
         <div class="ai-heading">
           <p class="eyebrow">ProjectProof AI</p>
@@ -691,6 +631,44 @@ function renderPhotoCard(project, stage) {
         ${estimateButton}
       </div>
     </article>
+  `;
+}
+
+function renderProofFlowPanel() {
+  return `
+    <section class="panel-box overview-card proof-flow-panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Proof flow</p>
+          <h3>Before to after</h3>
+        </div>
+      </div>
+      <div class="proof-strip" aria-label="Proof workflow">
+        <article><img src="assets/proof-before-real.png" alt=""><div><strong>Before</strong><span>Starting condition</span></div></article>
+        <article><img src="assets/proof-progress-real.png" alt=""><div><strong>Progress</strong><span>Work performed</span></div></article>
+        <article><img src="assets/proof-after-real.png" alt=""><div><strong>After</strong><span>Client-ready proof</span></div></article>
+      </div>
+    </section>
+  `;
+}
+
+function renderChecklistPanel(project) {
+  return `
+    <section class="panel-box checklist-panel" aria-label="Proof checklist">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Proof checklist</p>
+          <h3>Closeout steps</h3>
+        </div>
+      </div>
+      <div class="stack">
+        ${project.checklist.map(renderCheckRow).join("")}
+      </div>
+      <div class="quick-form">
+        <input id="checkInput" type="text" placeholder="Add checklist item">
+        <button class="secondary-button" data-action="add-check" type="button">Add</button>
+      </div>
+    </section>
   `;
 }
 

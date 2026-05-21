@@ -197,9 +197,7 @@ h1 {
   scroll-behavior: smooth;
 }
 
-.overview-swipe,
 .work-swipe,
-.tool-swipe,
 .handoff-swipe {
   display: flex;
   align-items: flex-start;
@@ -212,16 +210,12 @@ h1 {
   -webkit-overflow-scrolling: touch;
 }
 
-.overview-swipe::-webkit-scrollbar,
 .work-swipe::-webkit-scrollbar,
-.tool-swipe::-webkit-scrollbar,
 .handoff-swipe::-webkit-scrollbar {
   display: none;
 }
 
-.overview-swipe > .panel-box,
 .work-swipe > .panel-box,
-.tool-swipe > .panel-box,
 .handoff-swipe > .panel-box,
 .handoff-swipe > .ai-panel {
   flex: 0 0 min(560px, 92vw);
@@ -230,8 +224,13 @@ h1 {
   scroll-snap-stop: always;
 }
 
-.work-swipe > .record-edit-panel {
+.work-swipe > .proof-flow-panel,
+.work-swipe > .checklist-panel {
   flex-basis: min(420px, 92vw);
+}
+
+.handoff-swipe > .receipt-panel {
+  flex-basis: min(500px, 92vw);
 }
 
 .hero-panel {
@@ -249,6 +248,10 @@ h1 {
   box-shadow: var(--shadow-soft);
   overflow: hidden;
   padding: 8px;
+}
+
+.dashboard-summary {
+  grid-column: 1 / -1;
 }
 
 .hero-panel::before {
@@ -1326,9 +1329,7 @@ dialog::backdrop {
     grid-template-columns: 1fr;
   }
 
-  .overview-swipe > .panel-box,
   .work-swipe > .panel-box,
-  .tool-swipe > .panel-box,
   .handoff-swipe > .panel-box,
   .handoff-swipe > .ai-panel {
     flex-basis: calc(100vw - 12px);
