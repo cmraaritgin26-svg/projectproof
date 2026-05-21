@@ -536,15 +536,15 @@ h1 {
 }
 
 .summary-card.primary {
-  border-color: transparent;
+  border-color: rgba(127, 180, 255, 0.18);
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent),
-    linear-gradient(135deg, #1d4fb2 0%, #168f86 72%, #b98232 100%);
+    linear-gradient(180deg, rgba(23, 34, 53, 0.95), rgba(12, 18, 30, 0.95)),
+    var(--surface);
   color: #fff;
 }
 
 .summary-card.primary::after {
-  background: rgba(255, 255, 255, 0.66);
+  background: var(--blue);
 }
 
 .summary-card span,
@@ -1177,7 +1177,7 @@ h1 {
   border: 1px solid rgba(127, 180, 255, 0.22);
   border-radius: 8px;
   background:
-    linear-gradient(135deg, rgba(45, 101, 216, 0.16), rgba(19, 122, 116, 0.12), rgba(185, 138, 61, 0.08)),
+    linear-gradient(180deg, rgba(23, 34, 53, 0.95), rgba(12, 18, 30, 0.95)),
     rgba(16, 24, 39, 0.96);
   box-shadow: var(--shadow-soft);
   padding: 8px;
