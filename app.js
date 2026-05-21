@@ -13,6 +13,16 @@ const closeSettingsDialog = document.querySelector("#closeSettingsDialog");
 const settingsBusinessFields = document.querySelector("#settingsBusinessFields");
 const projectDialog = document.querySelector("#projectDialog");
 const projectForm = document.querySelector("#projectForm");
+const detailsButton = document.querySelector("#detailsButton");
+const detailsDialog = document.querySelector("#detailsDialog");
+const closeDetailsDialog = document.querySelector("#closeDetailsDialog");
+const workRecordDialog = document.querySelector("#workRecordDialog");
+const workRecordForm = document.querySelector("#workRecordForm");
+const workRecordDialogFields = document.querySelector("#workRecordDialogFields");
+const closeWorkRecordDialog = document.querySelector("#closeWorkRecordDialog");
+const invoiceDialog = document.querySelector("#invoiceDialog");
+const invoiceDialogFields = document.querySelector("#invoiceDialogFields");
+const closeInvoiceDialog = document.querySelector("#closeInvoiceDialog");
 const estimateDialog = document.querySelector("#estimateDialog");
 const estimateForm = document.querySelector("#estimateForm");
 const estimateDialogFields = document.querySelector("#estimateDialogFields");
@@ -39,6 +49,10 @@ settingsButton?.addEventListener("click", () => {
   openSettingsDialog();
 });
 
+detailsButton?.addEventListener("click", () => {
+  openDetailsDialog();
+});
+
 heroNewButtons.forEach((button) => button.addEventListener("click", () => {
   openProjectDialog();
 }));
@@ -53,6 +67,18 @@ closeSettingsDialog?.addEventListener("click", () => {
 
 closeEstimateDialog?.addEventListener("click", () => {
   estimateDialog.close();
+});
+
+closeDetailsDialog?.addEventListener("click", () => {
+  detailsDialog.close();
+});
+
+closeWorkRecordDialog?.addEventListener("click", () => {
+  workRecordDialog.close();
+});
+
+closeInvoiceDialog?.addEventListener("click", () => {
+  invoiceDialog.close();
 });
 
 function openProjectDialog() {
@@ -73,6 +99,26 @@ function openEstimateDialog() {
   estimateDialogFields.innerHTML = renderEstimateFields(project);
   estimateDialog.showModal();
   document.querySelector("#estimateTitleInput")?.focus();
+}
+
+function openDetailsDialog() {
+  if (!getActiveProject()) return;
+  detailsDialog.showModal();
+}
+
+function openWorkRecordDialog() {
+  const project = getActiveProject();
+  if (!project) return;
+  workRecordDialogFields.innerHTML = renderWorkRecordFields(project);
+  workRecordDialog.showModal();
+  document.querySelector("#projectNameEdit")?.focus();
+}
+
+function openInvoiceDialog() {
+  const project = getActiveProject();
+  if (!project) return;
+  invoiceDialogFields.innerHTML = renderInvoiceFields(project);
+  invoiceDialog.showModal();
 }
 
 settingsForm?.addEventListener("submit", (event) => {
@@ -99,6 +145,56 @@ estimateDialog?.addEventListener("click", (event) => {
   if (button.dataset.action === "dictate-estimate") {
     startEstimateDictation(project);
   }
+});
+
+detailsDialog?.addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-details-action]");
+  if (!button) return;
+  if (button.dataset.detailsAction === "open-work-record") {
+    detailsDialog.close();
+    openWorkRecordDialog();
+  }
+  if (button.dataset.detailsAction === "open-invoice") {
+    detailsDialog.close();
+    openInvoiceDialog();
+  }
+});
+
+workRecordForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const project = getActiveProject();
+  if (!project) return;
+  saveWorkRecordFromForm(project);
+  saveProjects();
+  workRecordDialog.close();
+  render();
+});
+
+invoiceDialog?.addEventListener("click", async (event) => {
+  const button = event.target.closest("button[data-action]");
+  if (!button) return;
+  const project = getActiveProject();
+  if (!project) return;
+  const action = button.dataset.action;
+
+  if (action === "add-material") {
+    addMaterialFromForm(project);
+  }
+  if (action === "add-hours") {
+    addHoursFromForm(project);
+  }
+  if (action === "create-invoice") {
+    await createInvoicePdf(project);
+    return;
+  }
+  if (action === "email-invoice") {
+    await emailInvoice(project);
+    return;
+  }
+
+  saveProjects();
+  render();
+  invoiceDialogFields.innerHTML = renderInvoiceFields(project);
 });
 
 projectForm.addEventListener("submit", (event) => {
@@ -142,10 +238,7 @@ projectDetail.addEventListener("click", async (event) => {
   }
 
   if (action === "save-project-info") {
-    const name = document.querySelector("#projectNameEdit").value.trim();
-    if (name) project.name = name;
-    project.client = document.querySelector("#projectClientEdit").value.trim();
-    project.type = document.querySelector("#projectTypeEdit").value;
+    saveWorkRecordFromForm(project);
   }
 
   if (action === "open-estimate") {
@@ -174,11 +267,7 @@ projectDetail.addEventListener("click", async (event) => {
   }
 
   if (action === "add-material") {
-    const name = document.querySelector("#materialName").value.trim();
-    const cost = Number(document.querySelector("#materialCost").value) || 0;
-    if (name) project.materials.push({ id: makeId(), name, cost });
-    document.querySelector("#materialName").value = "";
-    document.querySelector("#materialCost").value = "";
+    addMaterialFromForm(project);
   }
 
   if (action === "add-receipt-material") {
@@ -197,9 +286,7 @@ projectDetail.addEventListener("click", async (event) => {
   }
 
   if (action === "add-hours") {
-    const hours = Number(document.querySelector("#hoursInput").value) || 0;
-    if (hours > 0) project.hours = Math.round((Number(project.hours) + hours) * 100) / 100;
-    document.querySelector("#hoursInput").value = "";
+    addHoursFromForm(project);
   }
 
   if (action === "save-notes") {
@@ -428,9 +515,6 @@ function renderProjectDetail() {
     `;
     return;
   }
-  const estimate = getProjectEstimate(project);
-  const invoiceTotal = getInvoiceTotal(project);
-
   projectDetail.innerHTML = `
     <div class="detail-header">
       <div>
@@ -440,8 +524,6 @@ function renderProjectDetail() {
       </div>
       <div class="detail-actions">
         <button class="secondary-button" data-action="copy-report" type="button">Copy client report</button>
-        <button class="secondary-button" data-action="create-invoice" type="button">Create PDF invoice</button>
-        ${project.status === "complete" ? `<button class="primary-button" data-action="email-invoice" type="button">Email invoice</button>` : ""}
         <button class="primary-button" data-action="complete-project" type="button">${project.status === "complete" ? "Reopen" : "Mark complete"}</button>
         <button class="danger-button" data-action="delete-project" type="button">Delete</button>
       </div>
@@ -453,29 +535,6 @@ function renderProjectDetail() {
       <span>${getCompletedChecks(project)}/${project.checklist.length} checklist</span>
     </div>
     <section class="work-swipe" aria-label="Work capture">
-      <section class="panel-box record-edit-panel" id="recordEditor">
-        <div class="section-head">
-          <div>
-            <p class="eyebrow">Work record</p>
-            <h3>Edit information</h3>
-          </div>
-          <button class="secondary-button" data-action="save-project-info" type="button">Save changes</button>
-        </div>
-        <div class="record-edit-form">
-          <label>
-            <span>Project name</span>
-            <input id="projectNameEdit" type="text" value="${escapeHtml(project.name)}">
-          </label>
-          <label>
-            <span>Client or location</span>
-            <input id="projectClientEdit" type="text" value="${escapeHtml(project.client || "")}" placeholder="Client, address, or job site">
-          </label>
-          <label>
-            <span>Job type</span>
-            <select id="projectTypeEdit">${renderTypeOptions(project.type)}</select>
-          </label>
-        </div>
-      </section>
       <section class="panel-box photos-panel">
         <div class="section-head">
           <div>
@@ -503,32 +562,7 @@ function renderProjectDetail() {
         </div>
       </section>
     </section>
-    <section class="tool-swipe" aria-label="Invoice and receipt tools">
-      <section class="panel-box invoice-panel">
-        <div class="section-head">
-          <div>
-            <p class="eyebrow">Invoice</p>
-            <h3>Costs and totals</h3>
-          </div>
-        </div>
-        <div class="invoice-metrics">
-          <article><span>Estimate</span><strong>${formatMoney(estimate.amount)}</strong></article>
-          <article><span>Current invoice</span><strong>${formatMoney(invoiceTotal)}</strong></article>
-          <article><span>Materials</span><strong>${formatMoney(getMaterialsTotal(project))}</strong></article>
-        </div>
-        <div class="stack invoice-materials">
-          ${project.materials.length ? project.materials.map(renderMaterialRow).join("") : `<p class="muted">No materials logged.</p>`}
-        </div>
-        <div class="quick-form material-form">
-          <input id="materialName" type="text" placeholder="Material">
-          <input id="materialCost" type="number" min="0" step="0.01" placeholder="Cost">
-          <button class="secondary-button" data-action="add-material" type="button">Add</button>
-        </div>
-        <div class="quick-form">
-          <input id="hoursInput" type="number" min="0" step="0.25" placeholder="Add hours">
-          <button class="secondary-button" data-action="add-hours" type="button">Log</button>
-        </div>
-      </section>
+    <section class="tool-swipe" aria-label="Receipt tools">
       <section class="panel-box receipt-panel">
         <div class="section-head">
           <div>
@@ -638,6 +672,55 @@ function renderMaterialRow(item) {
   `;
 }
 
+function renderWorkRecordFields(project) {
+  return `
+    <div class="record-edit-form">
+      <label>
+        <span>Project name</span>
+        <input id="projectNameEdit" type="text" value="${escapeHtml(project.name)}">
+      </label>
+      <label>
+        <span>Client or location</span>
+        <input id="projectClientEdit" type="text" value="${escapeHtml(project.client || "")}" placeholder="Client, address, or job site">
+      </label>
+      <label>
+        <span>Job type</span>
+        <select id="projectTypeEdit">${renderTypeOptions(project.type)}</select>
+      </label>
+    </div>
+  `;
+}
+
+function renderInvoiceFields(project) {
+  const estimate = getProjectEstimate(project);
+  const invoiceTotal = getInvoiceTotal(project);
+  return `
+    <div class="invoice-dialog-body">
+      <div class="invoice-metrics">
+        <article><span>Estimate</span><strong>${formatMoney(estimate.amount)}</strong></article>
+        <article><span>Current invoice</span><strong>${formatMoney(invoiceTotal)}</strong></article>
+        <article><span>Materials</span><strong>${formatMoney(getMaterialsTotal(project))}</strong></article>
+      </div>
+      <div class="stack invoice-materials">
+        ${project.materials.length ? project.materials.map(renderMaterialRow).join("") : `<p class="muted">No materials logged.</p>`}
+      </div>
+      <div class="quick-form material-form">
+        <input id="materialName" type="text" placeholder="Material">
+        <input id="materialCost" type="number" min="0" step="0.01" placeholder="Cost">
+        <button class="secondary-button" data-action="add-material" type="button">Add</button>
+      </div>
+      <div class="quick-form">
+        <input id="hoursInput" type="number" min="0" step="0.25" placeholder="Add hours">
+        <button class="secondary-button" data-action="add-hours" type="button">Log</button>
+      </div>
+      <div class="details-dialog-actions">
+        <button class="secondary-button" data-action="create-invoice" type="button">Create PDF invoice</button>
+        ${project.status === "complete" ? `<button class="primary-button" data-action="email-invoice" type="button">Email invoice</button>` : ""}
+      </div>
+    </div>
+  `;
+}
+
 function renderEstimateFields(project) {
   const estimate = getProjectEstimate(project);
   return `
@@ -668,6 +751,30 @@ function saveEstimateFromForm(project) {
     amount: Number(document.querySelector("#estimateAmountInput")?.value) || 0,
     scope: document.querySelector("#estimateScopeInput")?.value.trim() || ""
   };
+}
+
+function saveWorkRecordFromForm(project) {
+  const name = document.querySelector("#projectNameEdit")?.value.trim();
+  if (name) project.name = name;
+  project.client = document.querySelector("#projectClientEdit")?.value.trim() || "";
+  project.type = document.querySelector("#projectTypeEdit")?.value || project.type;
+}
+
+function addMaterialFromForm(project) {
+  const name = document.querySelector("#materialName")?.value.trim() || "";
+  const cost = Number(document.querySelector("#materialCost")?.value) || 0;
+  if (name) project.materials.push({ id: makeId(), name, cost });
+  const nameInput = document.querySelector("#materialName");
+  const costInput = document.querySelector("#materialCost");
+  if (nameInput) nameInput.value = "";
+  if (costInput) costInput.value = "";
+}
+
+function addHoursFromForm(project) {
+  const input = document.querySelector("#hoursInput");
+  const hours = Number(input?.value) || 0;
+  if (hours > 0) project.hours = Math.round((Number(project.hours) + hours) * 100) / 100;
+  if (input) input.value = "";
 }
 
 function renderBusinessFields() {

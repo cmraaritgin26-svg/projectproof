@@ -117,7 +117,7 @@
   <nav class="bottom-app-nav" aria-label="Primary actions">
     <a href="#todayPanel">Today</a>
     <button class="primary-button hero-new-button" type="button">New</button>
-    <a href="#projectDetail">Details</a>
+    <button class="nav-button" id="detailsButton" type="button">Details</button>
   </nav>
 
   <dialog id="projectDialog">
@@ -151,6 +151,49 @@
       </label>
       <button class="primary-button" type="submit">Create proof report</button>
     </form>
+  </dialog>
+
+  <dialog id="detailsDialog">
+    <div class="dialog-panel details-dialog-panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Details</p>
+          <h2>Record tools</h2>
+        </div>
+        <button class="icon-button subtle" id="closeDetailsDialog" type="button" aria-label="Close">×</button>
+      </div>
+      <div class="details-dialog-actions">
+        <button class="secondary-button" data-details-action="open-work-record" type="button">Work record</button>
+        <button class="secondary-button" data-details-action="open-invoice" type="button">Invoice</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="workRecordDialog">
+    <form class="dialog-panel work-record-dialog-panel" id="workRecordForm">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Work record</p>
+          <h2>Edit information</h2>
+        </div>
+        <button class="icon-button subtle" id="closeWorkRecordDialog" type="button" aria-label="Close">×</button>
+      </div>
+      <div id="workRecordDialogFields"></div>
+      <button class="primary-button" type="submit">Save changes</button>
+    </form>
+  </dialog>
+
+  <dialog id="invoiceDialog">
+    <div class="dialog-panel invoice-dialog-panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Invoice</p>
+          <h2>Costs and totals</h2>
+        </div>
+        <button class="icon-button subtle" id="closeInvoiceDialog" type="button" aria-label="Close">×</button>
+      </div>
+      <div id="invoiceDialogFields"></div>
+    </div>
   </dialog>
 
   <dialog id="estimateDialog">
