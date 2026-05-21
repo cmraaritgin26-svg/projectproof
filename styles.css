@@ -839,7 +839,7 @@ h1 {
 .tool-button-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 4px;
+  gap: 5px;
   margin-top: 0;
 }
 
@@ -851,17 +851,17 @@ h1 {
   grid-template-areas:
     "step copy";
   align-items: center;
-  column-gap: 5px;
-  row-gap: 2px;
-  min-height: 32px;
+  column-gap: 6px;
+  row-gap: 3px;
+  min-height: 42px;
   border: 1px solid rgba(226, 235, 247, 0.14);
-  border-radius: 8px;
+  border-radius: 999px;
   background:
     radial-gradient(circle at 88% 12%, rgba(45, 101, 216, 0.22), transparent 34%),
     linear-gradient(180deg, rgba(31, 45, 68, 0.92), rgba(9, 15, 25, 0.96)),
     var(--surface);
   color: var(--ink);
-  padding: 4px 5px;
+  padding: 6px 9px;
   text-align: left;
   box-shadow:
     0 12px 26px rgba(0, 0, 0, 0.2),
@@ -886,15 +886,15 @@ h1 {
   grid-area: step;
   display: grid;
   place-items: center;
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   border: 1px solid rgba(45, 101, 216, 0.42);
   border-radius: 50%;
   background:
     linear-gradient(135deg, rgba(73, 130, 239, 0.38), rgba(26, 75, 174, 0.24)),
     rgba(45, 101, 216, 0.14);
   color: #cfe0ff;
-  font-size: 0.48rem;
+  font-size: 0.56rem;
   font-weight: 950;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 8px 16px rgba(45, 101, 216, 0.12);
 }
@@ -903,7 +903,8 @@ h1 {
   grid-area: copy;
   display: flex;
   align-items: baseline;
-  gap: 4px;
+  flex-wrap: wrap;
+  gap: 2px 5px;
   min-width: 0;
 }
 
@@ -917,18 +918,16 @@ h1 {
 
 .tool-copy strong {
   flex: 0 0 auto;
-  font-size: 0.62rem;
+  font-size: 0.72rem;
   line-height: 1.05;
 }
 
 .tool-copy small {
   color: var(--muted);
-  font-size: 0.5rem;
+  font-size: 0.58rem;
   font-weight: 800;
   line-height: 1.15;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .tool-tag {
@@ -1592,7 +1591,7 @@ dialog::backdrop {
 
   .tool-button-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 4px;
+    gap: 5px;
   }
 
   .tool-tile-button {
@@ -1600,7 +1599,7 @@ dialog::backdrop {
     grid-template-areas:
       "step copy";
     align-content: center;
-    min-height: 34px;
+    min-height: 46px;
   }
 
   .work-swipe > .panel-box,
