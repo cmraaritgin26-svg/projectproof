@@ -24,6 +24,9 @@ const closeWorkRecordDialog = document.querySelector("#closeWorkRecordDialog");
 const invoiceDialog = document.querySelector("#invoiceDialog");
 const invoiceDialogFields = document.querySelector("#invoiceDialogFields");
 const closeInvoiceDialog = document.querySelector("#closeInvoiceDialog");
+const photosDialog = document.querySelector("#photosDialog");
+const photosDialogFields = document.querySelector("#photosDialogFields");
+const closePhotosDialog = document.querySelector("#closePhotosDialog");
 const proofFlowDialog = document.querySelector("#proofFlowDialog");
 const proofFlowDialogFields = document.querySelector("#proofFlowDialogFields");
 const closeProofFlowDialog = document.querySelector("#closeProofFlowDialog");
@@ -97,6 +100,10 @@ closeInvoiceDialog?.addEventListener("click", () => {
   invoiceDialog.close();
 });
 
+closePhotosDialog?.addEventListener("click", () => {
+  photosDialog.close();
+});
+
 closeProofFlowDialog?.addEventListener("click", () => {
   proofFlowDialog.close();
 });
@@ -160,6 +167,10 @@ function openInvoiceDialog() {
 function openToolDialog(action) {
   const project = getActiveProject();
   if (!project) return;
+  if (action === "open-photos") {
+    photosDialogFields.innerHTML = renderPhotosContent(project);
+    photosDialog.showModal();
+  }
   if (action === "open-proof-flow") {
     proofFlowDialogFields.innerHTML = renderProofFlowContent();
     proofFlowDialog.showModal();
@@ -248,6 +259,7 @@ async function handleToolDialogChange(event) {
 }
 
 function refreshOpenToolDialogs(project) {
+  if (photosDialog?.open) photosDialogFields.innerHTML = renderPhotosContent(project);
   if (checklistDialog?.open) checklistDialogFields.innerHTML = renderChecklistContent(project);
   if (receiptDialog?.open) receiptDialogFields.innerHTML = renderReceiptContent(project);
   if (aiDialog?.open) aiDialogFields.innerHTML = renderAiContent(project);
@@ -331,6 +343,7 @@ invoiceDialog?.addEventListener("click", async (event) => {
 });
 
 [
+  photosDialog,
   proofFlowDialog,
   checklistDialog,
   receiptDialog,
@@ -339,6 +352,7 @@ invoiceDialog?.addEventListener("click", async (event) => {
 ].forEach((dialog) => dialog?.addEventListener("click", handleToolDialogClick));
 
 [
+  photosDialog,
   checklistDialog,
   receiptDialog
 ].forEach((dialog) => dialog?.addEventListener("change", handleToolDialogChange));
@@ -720,18 +734,8 @@ function renderProjectDetail() {
     return;
   }
   projectDetail.innerHTML = `
-    <section class="panel-box photos-panel">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Proof photos</p>
-          <h3>Before, progress, after</h3>
-        </div>
-      </div>
-      <div class="photo-grid">
-        ${STAGES.map((stage) => renderPhotoCard(project, stage)).join("")}
-      </div>
-    </section>
     <section class="tool-button-grid" aria-label="Project tools">
+      ${renderToolButton("open-photos", "Proof photos", `${STAGES.filter((stage) => project.photos?.[stage]).length}/3 attached`)}
       ${renderToolButton("open-proof-flow", "Proof flow", "Before to after")}
       ${renderToolButton("open-checklist", "Checklist", `${getCompletedChecks(project)}/${project.checklist.length} complete`)}
       ${renderToolButton("open-receipt", "Receipt scanner", project.receiptPhoto ? "Receipt attached" : "Scan costs")}
@@ -774,6 +778,14 @@ function renderToolButton(action, label, detail) {
       <strong>${escapeHtml(label)}</strong>
       <span>${escapeHtml(detail)}</span>
     </button>
+  `;
+}
+
+function renderPhotosContent(project) {
+  return `
+    <div class="photo-grid">
+      ${STAGES.map((stage) => renderPhotoCard(project, stage)).join("")}
+    </div>
   `;
 }
 
