@@ -847,12 +847,8 @@ h1 {
   position: relative;
   overflow: hidden;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  grid-template-areas:
-    "step copy";
+  grid-template-columns: minmax(0, 1fr);
   align-items: center;
-  column-gap: 6px;
-  row-gap: 3px;
   min-height: 42px;
   border: 1px solid rgba(226, 235, 247, 0.14);
   border-radius: 999px;
@@ -861,7 +857,7 @@ h1 {
     linear-gradient(180deg, rgba(31, 45, 68, 0.92), rgba(9, 15, 25, 0.96)),
     var(--surface);
   color: var(--ink);
-  padding: 6px 9px;
+  padding: 6px 30px;
   text-align: center;
   box-shadow:
     0 12px 26px rgba(0, 0, 0, 0.2),
@@ -883,7 +879,10 @@ h1 {
 }
 
 .tool-step {
-  grid-area: step;
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
   display: grid;
   place-items: center;
   width: 22px;
@@ -900,7 +899,6 @@ h1 {
 }
 
 .tool-copy {
-  grid-area: copy;
   display: grid;
   justify-items: center;
   gap: 2px;
@@ -1594,9 +1592,7 @@ dialog::backdrop {
   }
 
   .tool-tile-button {
-    grid-template-columns: auto minmax(0, 1fr);
-    grid-template-areas:
-      "step copy";
+    grid-template-columns: minmax(0, 1fr);
     align-content: center;
     min-height: 46px;
   }
