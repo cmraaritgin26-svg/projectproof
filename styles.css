@@ -772,6 +772,10 @@ h1 {
   padding: 0 11px;
 }
 
+.estimate-photo-button {
+  min-height: 38px;
+}
+
 .two-column {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -1102,6 +1106,10 @@ dialog::backdrop {
 
 .settings-panel {
   width: min(520px, calc(100vw - 28px));
+}
+
+.estimate-dialog-panel {
+  width: min(560px, calc(100vw - 28px));
 }
 
 .report-preview {

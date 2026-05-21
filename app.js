@@ -13,6 +13,10 @@ const closeSettingsDialog = document.querySelector("#closeSettingsDialog");
 const settingsBusinessFields = document.querySelector("#settingsBusinessFields");
 const projectDialog = document.querySelector("#projectDialog");
 const projectForm = document.querySelector("#projectForm");
+const estimateDialog = document.querySelector("#estimateDialog");
+const estimateForm = document.querySelector("#estimateForm");
+const estimateDialogFields = document.querySelector("#estimateDialogFields");
+const closeEstimateDialog = document.querySelector("#closeEstimateDialog");
 const projectName = document.querySelector("#projectName");
 const projectClient = document.querySelector("#projectClient");
 const projectType = document.querySelector("#projectType");
@@ -47,6 +51,10 @@ closeSettingsDialog?.addEventListener("click", () => {
   settingsDialog.close();
 });
 
+closeEstimateDialog?.addEventListener("click", () => {
+  estimateDialog.close();
+});
+
 function openProjectDialog() {
   projectForm.reset();
   projectDialog.showModal();
@@ -59,10 +67,38 @@ function openSettingsDialog() {
   document.querySelector("#businessNameInput")?.focus();
 }
 
+function openEstimateDialog() {
+  const project = getActiveProject();
+  if (!project) return;
+  estimateDialogFields.innerHTML = renderEstimateFields(project);
+  estimateDialog.showModal();
+  document.querySelector("#estimateTitleInput")?.focus();
+}
+
 settingsForm?.addEventListener("submit", (event) => {
   event.preventDefault();
   saveBusinessProfileFromForm();
   settingsDialog.close();
+});
+
+estimateForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const project = getActiveProject();
+  if (!project) return;
+  saveEstimateFromForm(project);
+  saveProjects();
+  estimateDialog.close();
+  render();
+});
+
+estimateDialog?.addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-action]");
+  if (!button) return;
+  const project = getActiveProject();
+  if (!project) return;
+  if (button.dataset.action === "dictate-estimate") {
+    startEstimateDictation(project);
+  }
 });
 
 projectForm.addEventListener("submit", (event) => {
@@ -112,12 +148,13 @@ projectDetail.addEventListener("click", async (event) => {
     project.type = document.querySelector("#projectTypeEdit").value;
   }
 
+  if (action === "open-estimate") {
+    openEstimateDialog();
+    return;
+  }
+
   if (action === "save-estimate") {
-    project.estimate = {
-      title: document.querySelector("#estimateTitleInput").value.trim(),
-      amount: Number(document.querySelector("#estimateAmountInput").value) || 0,
-      scope: document.querySelector("#estimateScopeInput").value.trim()
-    };
+    saveEstimateFromForm(project);
   }
 
   if (action === "dictate-estimate") {
@@ -466,34 +503,7 @@ function renderProjectDetail() {
         </div>
       </section>
     </section>
-    <section class="tool-swipe" aria-label="Estimate invoice and receipt tools">
-      <section class="panel-box estimate-panel">
-        <div class="section-head">
-          <div>
-            <p class="eyebrow">Client estimate</p>
-            <h3>Estimate and scope</h3>
-          </div>
-          <button class="secondary-button" data-action="save-estimate" type="button">Save estimate</button>
-        </div>
-        <div class="estimate-form">
-          <label>
-            <span>Estimate title</span>
-            <input id="estimateTitleInput" type="text" value="${escapeHtml(estimate.title)}" placeholder="Room paint, yard cleanup, wall repair">
-          </label>
-          <label>
-            <span>Estimate amount</span>
-            <input id="estimateAmountInput" type="number" min="0" step="0.01" value="${estimate.amount || ""}" placeholder="0.00">
-          </label>
-          <label class="estimate-scope-field">
-            <span>Scope shown to client</span>
-            <textarea id="estimateScopeInput" placeholder="Estimated room size, yard area, wall space, materials, labor assumptions">${escapeHtml(estimate.scope)}</textarea>
-          </label>
-          <div class="estimate-actions">
-            <button class="secondary-button" data-action="dictate-estimate" type="button">Dictate estimate</button>
-            <p class="feature-note">${escapeHtml(project.estimateDictationStatus || "Use voice-to-text to fill the estimate scope while walking the job.")}</p>
-          </div>
-        </div>
-      </section>
+    <section class="tool-swipe" aria-label="Invoice and receipt tools">
       <section class="panel-box invoice-panel">
         <div class="section-head">
           <div>
@@ -581,6 +591,10 @@ function renderProjectDetail() {
 function renderPhotoCard(project, stage) {
   const label = stage[0].toUpperCase() + stage.slice(1);
   const photo = project.photos?.[stage];
+  const estimate = getProjectEstimate(project);
+  const estimateButton = stage === "after"
+    ? `<button class="secondary-button estimate-photo-button" data-action="open-estimate" type="button">Estimate ${estimate.amount ? formatMoney(estimate.amount) : ""}</button>`
+    : "";
   return `
     <article class="photo-card">
       <div>
@@ -595,6 +609,7 @@ function renderPhotoCard(project, stage) {
           Add photo
           <input data-photo-stage="${escapeHtml(stage)}" type="file" accept="image/*" capture="environment" hidden>
         </label>
+        ${estimateButton}
       </div>
     </article>
   `;
@@ -621,6 +636,38 @@ function renderMaterialRow(item) {
       <strong>${formatMoney(item.cost)}</strong>
     </div>
   `;
+}
+
+function renderEstimateFields(project) {
+  const estimate = getProjectEstimate(project);
+  return `
+    <div class="estimate-form">
+      <label>
+        <span>Estimate title</span>
+        <input id="estimateTitleInput" type="text" value="${escapeHtml(estimate.title)}" placeholder="Room paint, yard cleanup, wall repair">
+      </label>
+      <label>
+        <span>Estimate amount</span>
+        <input id="estimateAmountInput" type="number" min="0" step="0.01" value="${estimate.amount || ""}" placeholder="0.00">
+      </label>
+      <label class="estimate-scope-field">
+        <span>Scope shown to client</span>
+        <textarea id="estimateScopeInput" placeholder="Estimated room size, yard area, wall space, materials, labor assumptions">${escapeHtml(estimate.scope)}</textarea>
+      </label>
+      <div class="estimate-actions">
+        <button class="secondary-button" data-action="dictate-estimate" type="button">Dictate estimate</button>
+        <p class="feature-note">${escapeHtml(project.estimateDictationStatus || "Use voice-to-text to fill the estimate scope while walking the job.")}</p>
+      </div>
+    </div>
+  `;
+}
+
+function saveEstimateFromForm(project) {
+  project.estimate = {
+    title: document.querySelector("#estimateTitleInput")?.value.trim() || "",
+    amount: Number(document.querySelector("#estimateAmountInput")?.value) || 0,
+    scope: document.querySelector("#estimateScopeInput")?.value.trim() || ""
+  };
 }
 
 function renderBusinessFields() {
