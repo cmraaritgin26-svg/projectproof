@@ -893,7 +893,7 @@ function renderProjectDetail() {
       <span>${project.status === "complete" ? "Complete" : "Active record"}</span>
     </div>
     <section class="tool-button-grid" aria-label="Project tools">
-      ${renderToolButton("open-photos", "Photos", "Before, progress, after", "01", "Capture")}
+      ${renderToolButton("open-photos", "Before/After", "Proof photos", "01", "Capture")}
       ${renderToolButton("open-checklist", "Checklist", `${getCompletedChecks(project)}/${project.checklist.length} complete`, "02", "Track")}
       ${renderToolButton("open-receipt", "Receipts", project.receiptPhoto ? "Receipt attached" : "Scan costs", "03", "Costs")}
       ${renderToolButton("open-ai", "AI writer", "Client wording", "04", "Handoff")}
