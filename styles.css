@@ -726,6 +726,45 @@ h1 {
   margin-bottom: 0;
 }
 
+.tool-button-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.tool-tile-button {
+  display: grid;
+  align-content: center;
+  gap: 3px;
+  min-height: 64px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(23, 34, 53, 0.86), rgba(10, 16, 27, 0.92)),
+    var(--surface);
+  color: var(--ink);
+  padding: 7px;
+  text-align: left;
+}
+
+.tool-tile-button strong,
+.tool-tile-button span {
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.tool-tile-button strong {
+  font-size: 0.82rem;
+}
+
+.tool-tile-button span {
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
 .photo-card {
   display: grid;
   gap: 5px;
@@ -1144,7 +1183,8 @@ dialog::backdrop {
 
 .details-dialog-panel,
 .work-record-dialog-panel,
-.invoice-dialog-panel {
+.invoice-dialog-panel,
+.tool-dialog-panel {
   width: min(560px, calc(100vw - 28px));
 }
 
@@ -1343,6 +1383,7 @@ dialog::backdrop {
   .proof-strip,
   .ai-panel,
   .photo-grid,
+  .tool-button-grid,
   .record-edit-form,
   .estimate-form,
   .estimate-actions,

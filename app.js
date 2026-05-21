@@ -24,6 +24,21 @@ const closeWorkRecordDialog = document.querySelector("#closeWorkRecordDialog");
 const invoiceDialog = document.querySelector("#invoiceDialog");
 const invoiceDialogFields = document.querySelector("#invoiceDialogFields");
 const closeInvoiceDialog = document.querySelector("#closeInvoiceDialog");
+const proofFlowDialog = document.querySelector("#proofFlowDialog");
+const proofFlowDialogFields = document.querySelector("#proofFlowDialogFields");
+const closeProofFlowDialog = document.querySelector("#closeProofFlowDialog");
+const checklistDialog = document.querySelector("#checklistDialog");
+const checklistDialogFields = document.querySelector("#checklistDialogFields");
+const closeChecklistDialog = document.querySelector("#closeChecklistDialog");
+const receiptDialog = document.querySelector("#receiptDialog");
+const receiptDialogFields = document.querySelector("#receiptDialogFields");
+const closeReceiptDialog = document.querySelector("#closeReceiptDialog");
+const aiDialog = document.querySelector("#aiDialog");
+const aiDialogFields = document.querySelector("#aiDialogFields");
+const closeAiDialog = document.querySelector("#closeAiDialog");
+const notesDialog = document.querySelector("#notesDialog");
+const notesDialogFields = document.querySelector("#notesDialogFields");
+const closeNotesDialog = document.querySelector("#closeNotesDialog");
 const estimateDialog = document.querySelector("#estimateDialog");
 const estimateForm = document.querySelector("#estimateForm");
 const estimateDialogFields = document.querySelector("#estimateDialogFields");
@@ -82,6 +97,26 @@ closeInvoiceDialog?.addEventListener("click", () => {
   invoiceDialog.close();
 });
 
+closeProofFlowDialog?.addEventListener("click", () => {
+  proofFlowDialog.close();
+});
+
+closeChecklistDialog?.addEventListener("click", () => {
+  checklistDialog.close();
+});
+
+closeReceiptDialog?.addEventListener("click", () => {
+  receiptDialog.close();
+});
+
+closeAiDialog?.addEventListener("click", () => {
+  aiDialog.close();
+});
+
+closeNotesDialog?.addEventListener("click", () => {
+  notesDialog.close();
+});
+
 function openProjectDialog() {
   projectForm.reset();
   projectDialog.showModal();
@@ -120,6 +155,103 @@ function openInvoiceDialog() {
   if (!project) return;
   invoiceDialogFields.innerHTML = renderInvoiceFields(project);
   invoiceDialog.showModal();
+}
+
+function openToolDialog(action) {
+  const project = getActiveProject();
+  if (!project) return;
+  if (action === "open-proof-flow") {
+    proofFlowDialogFields.innerHTML = renderProofFlowContent();
+    proofFlowDialog.showModal();
+  }
+  if (action === "open-checklist") {
+    checklistDialogFields.innerHTML = renderChecklistContent(project);
+    checklistDialog.showModal();
+  }
+  if (action === "open-receipt") {
+    receiptDialogFields.innerHTML = renderReceiptContent(project);
+    receiptDialog.showModal();
+  }
+  if (action === "open-ai") {
+    aiDialogFields.innerHTML = renderAiContent(project);
+    aiDialog.showModal();
+  }
+  if (action === "open-notes") {
+    notesDialogFields.innerHTML = renderNotesContent(project);
+    notesDialog.showModal();
+  }
+}
+
+async function handleToolDialogClick(event) {
+  const button = event.target.closest("button[data-action]");
+  if (!button) return;
+  const project = getActiveProject();
+  if (!project) return;
+  const action = button.dataset.action;
+
+  if (action === "add-check") {
+    const input = document.querySelector("#checkInput");
+    const text = input?.value.trim() || "";
+    if (text) project.checklist.push({ id: makeId(), text, done: false });
+    if (input) input.value = "";
+  }
+  if (action === "read-receipt") {
+    await readReceiptWithOcr(project);
+  }
+  if (action === "add-receipt-material") {
+    const name = document.querySelector("#receiptVendorInput")?.value.trim() || "";
+    const cost = Number(document.querySelector("#receiptTotalInput")?.value) || 0;
+    if (name) {
+      project.materials.push({ id: makeId(), name, cost });
+      project.receiptVendor = "";
+      project.receiptTotal = "";
+      project.receiptDraft = "";
+    }
+  }
+  if (action === "generate-ai") {
+    project.aiDraft = buildAiDraft(project);
+  }
+  if (action === "use-ai-notes") {
+    project.notes = buildAiNote(project);
+    project.aiDraft = buildAiDraft(project);
+  }
+  if (action === "save-notes") {
+    project.notes = document.querySelector("#notesInput")?.value.trim() || "";
+  }
+
+  saveProjects();
+  render();
+  refreshOpenToolDialogs(project);
+}
+
+async function handleToolDialogChange(event) {
+  const project = getActiveProject();
+  if (!project) return;
+  const checkbox = event.target.closest("input[data-check-id]");
+  if (checkbox) {
+    const item = project.checklist.find((entry) => entry.id === checkbox.dataset.checkId);
+    if (item) item.done = checkbox.checked;
+    saveProjects();
+    render();
+    refreshOpenToolDialogs(project);
+    return;
+  }
+  const receiptInput = event.target.closest("input[data-receipt-input]");
+  if (receiptInput && receiptInput.files?.[0]) {
+    const file = receiptInput.files[0];
+    project.receiptPhoto = await fileToDataUrl(file);
+    project.receiptDraft = `Receipt captured: ${file.name.replace(/\.[^.]+$/, "")}`;
+    saveProjects();
+    render();
+    refreshOpenToolDialogs(project);
+  }
+}
+
+function refreshOpenToolDialogs(project) {
+  if (checklistDialog?.open) checklistDialogFields.innerHTML = renderChecklistContent(project);
+  if (receiptDialog?.open) receiptDialogFields.innerHTML = renderReceiptContent(project);
+  if (aiDialog?.open) aiDialogFields.innerHTML = renderAiContent(project);
+  if (notesDialog?.open) notesDialogFields.innerHTML = renderNotesContent(project);
 }
 
 settingsForm?.addEventListener("submit", (event) => {
@@ -198,6 +330,19 @@ invoiceDialog?.addEventListener("click", async (event) => {
   invoiceDialogFields.innerHTML = renderInvoiceFields(project);
 });
 
+[
+  proofFlowDialog,
+  checklistDialog,
+  receiptDialog,
+  aiDialog,
+  notesDialog
+].forEach((dialog) => dialog?.addEventListener("click", handleToolDialogClick));
+
+[
+  checklistDialog,
+  receiptDialog
+].forEach((dialog) => dialog?.addEventListener("change", handleToolDialogChange));
+
 projectForm.addEventListener("submit", (event) => {
   event.preventDefault();
   const name = projectName.value.trim();
@@ -267,6 +412,11 @@ projectDetail.addEventListener("click", async (event) => {
 
   if (action === "open-estimate") {
     openEstimateDialog();
+    return;
+  }
+
+  if (action.startsWith("open-")) {
+    openToolDialog(action);
     return;
   }
 
@@ -570,75 +720,23 @@ function renderProjectDetail() {
     return;
   }
   projectDetail.innerHTML = `
-    <section class="work-swipe" aria-label="Work capture">
-      ${renderProofFlowPanel()}
-      ${renderChecklistPanel(project)}
-      <section class="panel-box photos-panel">
-        <div class="section-head">
-          <div>
-            <p class="eyebrow">Proof photos</p>
-            <h3>Before, progress, after</h3>
-          </div>
+    <section class="panel-box photos-panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Proof photos</p>
+          <h3>Before, progress, after</h3>
         </div>
-        <div class="photo-grid">
-          ${STAGES.map((stage) => renderPhotoCard(project, stage)).join("")}
-        </div>
-      </section>
+      </div>
+      <div class="photo-grid">
+        ${STAGES.map((stage) => renderPhotoCard(project, stage)).join("")}
+      </div>
     </section>
-    <section class="handoff-swipe" aria-label="Receipt and client handoff tools">
-      <section class="panel-box receipt-panel">
-        <div class="section-head">
-          <div>
-            <p class="eyebrow">Receipt scanner</p>
-            <h3>Materials capture</h3>
-          </div>
-          <label class="stage-button compact-stage-button">
-            Scan
-            <input data-receipt-input type="file" accept="image/*" capture="environment" hidden>
-          </label>
-        </div>
-        <div class="receipt-body">
-          <div class="receipt-frame">
-            ${project.receiptPhoto ? `<img src="${project.receiptPhoto}" alt="Receipt photo">` : `<span>Receipt image</span>`}
-          </div>
-          <div class="receipt-fields">
-            <p class="feature-note">${escapeHtml(project.receiptDraft || "Backend OCR can read this image later. For now, enter the vendor and total to add it to materials.")}</p>
-            <label>
-              <span>Vendor / item</span>
-              <input id="receiptVendorInput" type="text" value="${escapeHtml(project.receiptVendor || "")}" placeholder="Receipt vendor or material">
-            </label>
-            <label>
-              <span>Total</span>
-              <input id="receiptTotalInput" type="number" min="0" step="0.01" value="${escapeHtml(project.receiptTotal || "")}" placeholder="0.00">
-            </label>
-            <button class="primary-button" data-action="read-receipt" type="button">Read receipt</button>
-            <button class="secondary-button" data-action="add-receipt-material" type="button">Add to costs</button>
-          </div>
-        </div>
-      </section>
-      <section class="ai-panel">
-        <div class="ai-heading">
-          <p class="eyebrow">ProjectProof AI</p>
-          <h3>Client report writer</h3>
-          <p>Turn photos, costs, hours, and checklist status into professional wording.</p>
-        </div>
-        <div class="ai-actions">
-          <button class="primary-button" data-action="generate-ai" type="button">Write report</button>
-          <button class="secondary-button" data-action="use-ai-notes" type="button">Use as notes</button>
-        </div>
-        <pre class="ai-output">${escapeHtml(project.aiDraft || buildAiDraft(project))}</pre>
-      </section>
-      <section class="panel-box notes-panel">
-        <div class="section-head">
-          <div>
-            <p class="eyebrow">Client handoff</p>
-            <h3>Notes and report</h3>
-          </div>
-          <button class="secondary-button" data-action="save-notes" type="button">Save notes</button>
-        </div>
-        <textarea id="notesInput" placeholder="Work performed, client requests, issues found, next steps">${escapeHtml(project.notes)}</textarea>
-        <pre class="report-preview">${escapeHtml(buildReport(project))}</pre>
-      </section>
+    <section class="tool-button-grid" aria-label="Project tools">
+      ${renderToolButton("open-proof-flow", "Proof flow", "Before to after")}
+      ${renderToolButton("open-checklist", "Checklist", `${getCompletedChecks(project)}/${project.checklist.length} complete`)}
+      ${renderToolButton("open-receipt", "Receipt scanner", project.receiptPhoto ? "Receipt attached" : "Scan costs")}
+      ${renderToolButton("open-ai", "AI writer", "Client wording")}
+      ${renderToolButton("open-notes", "Notes/report", project.notes ? "Notes saved" : "Handoff notes")}
     </section>
   `;
 }
@@ -670,33 +768,28 @@ function renderPhotoCard(project, stage) {
   `;
 }
 
-function renderProofFlowPanel() {
+function renderToolButton(action, label, detail) {
   return `
-    <section class="panel-box overview-card proof-flow-panel">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Proof flow</p>
-          <h3>Before to after</h3>
-        </div>
-      </div>
-      <div class="proof-strip" aria-label="Proof workflow">
-        <article><img src="assets/proof-before-real.png" alt=""><div><strong>Before</strong><span>Starting condition</span></div></article>
-        <article><img src="assets/proof-progress-real.png" alt=""><div><strong>Progress</strong><span>Work performed</span></div></article>
-        <article><img src="assets/proof-after-real.png" alt=""><div><strong>After</strong><span>Client-ready proof</span></div></article>
-      </div>
-    </section>
+    <button class="tool-tile-button" data-action="${escapeHtml(action)}" type="button">
+      <strong>${escapeHtml(label)}</strong>
+      <span>${escapeHtml(detail)}</span>
+    </button>
   `;
 }
 
-function renderChecklistPanel(project) {
+function renderProofFlowContent() {
   return `
-    <section class="panel-box checklist-panel" aria-label="Proof checklist">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Proof checklist</p>
-          <h3>Closeout steps</h3>
-        </div>
-      </div>
+    <div class="proof-strip" aria-label="Proof workflow">
+      <article><img src="assets/proof-before-real.png" alt=""><div><strong>Before</strong><span>Starting condition</span></div></article>
+      <article><img src="assets/proof-progress-real.png" alt=""><div><strong>Progress</strong><span>Work performed</span></div></article>
+      <article><img src="assets/proof-after-real.png" alt=""><div><strong>After</strong><span>Client-ready proof</span></div></article>
+    </div>
+  `;
+}
+
+function renderChecklistContent(project) {
+  return `
+    <div class="checklist-panel">
       <div class="stack">
         ${project.checklist.map(renderCheckRow).join("")}
       </div>
@@ -704,7 +797,59 @@ function renderChecklistPanel(project) {
         <input id="checkInput" type="text" placeholder="Add checklist item">
         <button class="secondary-button" data-action="add-check" type="button">Add</button>
       </div>
-    </section>
+    </div>
+  `;
+}
+
+function renderReceiptContent(project) {
+  return `
+    <div class="receipt-body">
+      <div class="receipt-frame">
+        ${project.receiptPhoto ? `<img src="${project.receiptPhoto}" alt="Receipt photo">` : `<span>Receipt image</span>`}
+      </div>
+      <div class="receipt-fields">
+        <label class="stage-button compact-stage-button">
+          Scan receipt
+          <input data-receipt-input type="file" accept="image/*" capture="environment" hidden>
+        </label>
+        <p class="feature-note">${escapeHtml(project.receiptDraft || "Backend OCR can read this image later. For now, enter the vendor and total to add it to materials.")}</p>
+        <label>
+          <span>Vendor / item</span>
+          <input id="receiptVendorInput" type="text" value="${escapeHtml(project.receiptVendor || "")}" placeholder="Receipt vendor or material">
+        </label>
+        <label>
+          <span>Total</span>
+          <input id="receiptTotalInput" type="number" min="0" step="0.01" value="${escapeHtml(project.receiptTotal || "")}" placeholder="0.00">
+        </label>
+        <button class="primary-button" data-action="read-receipt" type="button">Read receipt</button>
+        <button class="secondary-button" data-action="add-receipt-material" type="button">Add to costs</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderAiContent(project) {
+  return `
+    <div class="ai-panel dialog-ai-panel">
+      <div class="ai-heading">
+        <p>Turn photos, costs, hours, and checklist status into professional wording.</p>
+      </div>
+      <div class="ai-actions">
+        <button class="primary-button" data-action="generate-ai" type="button">Write report</button>
+        <button class="secondary-button" data-action="use-ai-notes" type="button">Use as notes</button>
+      </div>
+      <pre class="ai-output">${escapeHtml(project.aiDraft || buildAiDraft(project))}</pre>
+    </div>
+  `;
+}
+
+function renderNotesContent(project) {
+  return `
+    <div class="notes-panel">
+      <button class="secondary-button" data-action="save-notes" type="button">Save notes</button>
+      <textarea id="notesInput" placeholder="Work performed, client requests, issues found, next steps">${escapeHtml(project.notes)}</textarea>
+      <pre class="report-preview">${escapeHtml(buildReport(project))}</pre>
+    </div>
   `;
 }
 
