@@ -104,13 +104,13 @@ h3 {
 }
 
 .brand-mark {
-  width: 52px;
-  height: 52px;
+  width: 64px;
+  height: 64px;
   flex: 0 0 auto;
   border: 0;
   border-radius: 0;
   background: transparent;
-  box-shadow: none;
+  filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.32));
   padding: 0;
   object-fit: contain;
 }
@@ -148,6 +148,14 @@ h1 {
   font-size: 0.75rem;
   font-weight: 900;
   padding: 8px 11px;
+}
+
+.top-records-button {
+  min-height: 36px;
+  padding: 0 11px;
+  border: 1px solid rgba(226, 235, 247, 0.12);
+  background: rgba(255, 255, 255, 0.07);
+  font-size: 0.74rem;
 }
 
 .eyebrow {
@@ -1403,8 +1411,8 @@ dialog::backdrop {
   }
 
   .brand-mark {
-    width: 46px;
-    height: 46px;
+    width: 56px;
+    height: 56px;
   }
 
   .plan-pill {
