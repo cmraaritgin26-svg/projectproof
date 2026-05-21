@@ -67,7 +67,7 @@ h3 {
 .app-shell {
   width: min(1020px, 100%);
   margin: 0 auto;
-  padding: 0 clamp(10px, 3vw, 18px) 82px;
+  padding: 0 clamp(6px, 2vw, 10px) 72px;
 }
 
 .topbar,
@@ -88,13 +88,13 @@ h3 {
   min-height: 64px;
   justify-content: space-between;
   align-items: center;
-  gap: 14px;
-  margin: 0 -10px 10px;
+  gap: 8px;
+  margin: 0 -6px 4px;
   border-bottom: 1px solid rgba(226, 235, 247, 0.1);
   background: rgba(7, 12, 20, 0.94);
   backdrop-filter: blur(14px);
   color: #f9fbff;
-  padding: 8px 10px;
+  padding: 6px;
 }
 
 .brand {
@@ -191,9 +191,9 @@ h1 {
 .home-swipe {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(238px, 0.34fr);
-  gap: 10px;
+  gap: 4px;
   align-items: start;
-  margin-bottom: 10px;
+  margin-bottom: 4px;
   scroll-behavior: smooth;
 }
 
@@ -203,11 +203,11 @@ h1 {
 .handoff-swipe {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
-  margin: 0 -2px 10px;
+  gap: 4px;
+  margin: 0 -1px 4px;
   overflow-x: auto;
-  padding: 0 2px 5px;
-  scroll-padding-inline: 2px;
+  padding: 0 1px;
+  scroll-padding-inline: 1px;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
 }
@@ -238,7 +238,7 @@ h1 {
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(230px, 0.9fr);
-  gap: 10px;
+  gap: 6px;
   align-items: stretch;
   margin: 0;
   border: 1px solid rgba(226, 235, 247, 0.16);
@@ -248,7 +248,7 @@ h1 {
     var(--surface);
   box-shadow: var(--shadow-soft);
   overflow: hidden;
-  padding: 12px;
+  padding: 8px;
 }
 
 .hero-panel::before {
@@ -258,7 +258,7 @@ h1 {
 .hero-copy {
   display: grid;
   align-content: start;
-  gap: 8px;
+  gap: 5px;
   min-height: auto;
   padding: 0;
 }
@@ -282,18 +282,18 @@ h1 {
 .hero-proof-row {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 6px;
-  margin-top: 4px;
+  gap: 4px;
+  margin-top: 2px;
 }
 
 .hero-proof-row article {
   display: grid;
-  gap: 5px;
+  gap: 3px;
   min-width: 0;
   border: 1px solid rgba(226, 235, 247, 0.1);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.045);
-  padding: 6px;
+  padding: 4px;
 }
 
 .hero-proof-row span {
@@ -316,8 +316,8 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 10px;
-  margin-top: 4px;
+  gap: 5px;
+  margin-top: 2px;
 }
 
 .secondary-link {
@@ -342,12 +342,12 @@ h1 {
 .app-status-panel {
   display: grid;
   grid-template-columns: 96px minmax(0, 1fr);
-  gap: 10px;
+  gap: 6px;
   align-items: center;
   border: 1px solid rgba(127, 180, 255, 0.14);
   border-radius: 8px;
   background: rgba(5, 10, 18, 0.36);
-  padding: 10px;
+  padding: 7px;
 }
 
 .status-ring {
@@ -408,23 +408,23 @@ h1 {
 .proof-strip {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
+  gap: 4px;
   margin-bottom: 0;
 }
 
 .proof-strip article {
   display: grid;
   grid-template-columns: 76px minmax(0, 1fr);
-  gap: 11px;
+  gap: 6px;
   align-items: center;
-  min-height: 68px;
+  min-height: 56px;
   border: 1px solid rgba(226, 235, 247, 0.13);
   border-radius: 8px;
   background:
     linear-gradient(135deg, rgba(23, 34, 53, 0.96), rgba(12, 18, 30, 0.92)),
     var(--surface);
   box-shadow: none;
-  padding: 7px;
+  padding: 5px;
 }
 
 .proof-strip img {
@@ -455,7 +455,7 @@ h1 {
 .summary-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
+  gap: 4px;
   margin-bottom: 0;
 }
 
@@ -472,8 +472,8 @@ h1 {
 }
 
 .summary-card {
-  min-height: 82px;
-  padding: 11px;
+  min-height: 70px;
+  padding: 8px;
   position: relative;
   overflow: hidden;
 }
@@ -528,7 +528,7 @@ h1 {
 
 .project-list-panel,
 .project-detail {
-  padding: 11px;
+  padding: 6px;
 }
 
 .project-list-panel {
@@ -544,23 +544,23 @@ h1 {
 
 .section-head {
   justify-content: space-between;
-  gap: 12px;
+  gap: 6px;
   align-items: flex-start;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 }
 
 .project-list {
   display: grid;
-  gap: 8px;
+  gap: 4px;
 }
 
 .project-button {
   width: 100%;
-  min-height: 76px;
+  min-height: 60px;
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.04);
   color: var(--ink);
-  padding: 11px;
+  padding: 8px;
   text-align: left;
   box-shadow: none;
 }
@@ -590,8 +590,8 @@ h1 {
 .empty-state {
   display: grid;
   place-items: center;
-  gap: 10px;
-  min-height: 340px;
+  gap: 6px;
+  min-height: 220px;
   text-align: center;
 }
 
@@ -609,9 +609,9 @@ h1 {
 .detail-header {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 12px;
+  gap: 6px;
   align-items: start;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 }
 
 .detail-header h2 {
@@ -675,8 +675,8 @@ h1 {
 
 .meta-strip {
   flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 12px;
+  gap: 4px;
+  margin-bottom: 6px;
 }
 
 .meta-strip span {
@@ -686,26 +686,26 @@ h1 {
   color: var(--muted);
   font-size: 0.74rem;
   font-weight: 850;
-  padding: 6px 9px;
+  padding: 4px 7px;
 }
 
 .photo-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  gap: 4px;
   margin-bottom: 0;
 }
 
 .photo-card {
   display: grid;
-  gap: 9px;
-  min-height: 262px;
+  gap: 5px;
+  min-height: 0;
   border: 1px solid var(--line);
   border-radius: 8px;
   background:
     linear-gradient(180deg, rgba(23, 34, 53, 0.92), rgba(10, 16, 27, 0.94)),
     var(--surface);
-  padding: 10px;
+  padding: 7px;
   box-shadow: var(--shadow-soft);
 }
 
@@ -719,24 +719,24 @@ h1 {
 .notes-panel {
   display: grid;
   align-content: start;
-  gap: 10px;
+  gap: 5px;
 }
 
 .photos-panel .photo-card {
-  min-height: 226px;
+  min-height: 0;
   box-shadow: none;
 }
 
 .photos-panel .photo-frame,
 .photos-panel .photo-frame img,
 .photos-panel .photo-placeholder {
-  min-height: 142px;
+  min-height: 118px;
 }
 
 .photo-frame {
   position: relative;
   overflow: hidden;
-  min-height: 178px;
+  min-height: 118px;
   border: 1px solid rgba(226, 235, 247, 0.12);
   border-radius: 8px;
   background:
@@ -747,7 +747,7 @@ h1 {
 .photo-frame img {
   width: 100%;
   height: 100%;
-  min-height: 178px;
+  min-height: 118px;
   object-fit: cover;
   display: block;
 }
@@ -755,12 +755,12 @@ h1 {
 .photo-placeholder {
   display: grid;
   place-items: center;
-  min-height: 178px;
+  min-height: 118px;
   color: #cbd6e6;
   font-size: 0.84rem;
   font-weight: 850;
   text-align: center;
-  padding: 18px;
+  padding: 10px;
 }
 
 .stage-button {
@@ -775,8 +775,8 @@ h1 {
 .two-column {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 10px;
-  margin-bottom: 10px;
+  gap: 4px;
+  margin-bottom: 4px;
 }
 
 .checklist-row {
@@ -788,13 +788,13 @@ h1 {
 .receipt-panel {
   display: grid;
   align-content: start;
-  gap: 10px;
+  gap: 5px;
 }
 
 .estimate-form {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) 150px;
-  gap: 10px;
+  gap: 5px;
 }
 
 .estimate-scope-field {
@@ -802,14 +802,14 @@ h1 {
 }
 
 .estimate-scope-field textarea {
-  min-height: 92px;
+  min-height: 72px;
 }
 
 .estimate-actions {
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  gap: 10px;
+  gap: 5px;
   align-items: center;
 }
 
@@ -828,14 +828,14 @@ h1 {
 .invoice-metrics {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
+  gap: 4px;
 }
 
 .invoice-metrics article {
   border: 1px solid rgba(226, 235, 247, 0.1);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.045);
-  padding: 9px;
+  padding: 6px;
 }
 
 .invoice-metrics span {
@@ -859,7 +859,7 @@ h1 {
 .business-form {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 9px;
+  gap: 5px;
 }
 
 .feature-note {
@@ -872,14 +872,14 @@ h1 {
 .receipt-body {
   display: grid;
   grid-template-columns: 128px minmax(0, 1fr);
-  gap: 10px;
+  gap: 5px;
   align-items: start;
 }
 
 .receipt-frame {
   display: grid;
   place-items: center;
-  min-height: 148px;
+  min-height: 118px;
   overflow: hidden;
   border: 1px solid rgba(226, 235, 247, 0.12);
   border-radius: 8px;
@@ -890,19 +890,19 @@ h1 {
   font-size: 0.8rem;
   font-weight: 850;
   text-align: center;
-  padding: 10px;
+  padding: 7px;
 }
 
 .receipt-frame img {
   width: 100%;
-  height: 148px;
+  height: 118px;
   object-fit: cover;
   display: block;
 }
 
 .receipt-fields {
   display: grid;
-  gap: 8px;
+  gap: 5px;
 }
 
 .compact-stage-button {
@@ -914,7 +914,7 @@ h1 {
 .ai-panel {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 12px;
+  gap: 6px;
   align-items: start;
   margin-bottom: 0;
   border: 1px solid rgba(127, 180, 255, 0.22);
@@ -923,7 +923,7 @@ h1 {
     linear-gradient(135deg, rgba(45, 101, 216, 0.16), rgba(19, 122, 116, 0.12), rgba(185, 138, 61, 0.08)),
     rgba(16, 24, 39, 0.96);
   box-shadow: var(--shadow-soft);
-  padding: 12px;
+  padding: 8px;
 }
 
 .ai-heading {
@@ -943,7 +943,7 @@ h1 {
 .ai-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 5px;
   justify-content: flex-end;
 }
 
@@ -955,7 +955,7 @@ h1 {
   border-radius: 8px;
   background: rgba(5, 10, 18, 0.5);
   color: var(--ink);
-  padding: 11px;
+  padding: 8px;
   font-family: "SF Mono", "Roboto Mono", ui-monospace, monospace;
   font-size: 0.8rem;
   line-height: 1.46;
@@ -966,7 +966,7 @@ h1 {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.045);
-  padding: 12px;
+  padding: 8px;
   box-shadow: var(--shadow-soft);
 }
 
@@ -978,7 +978,7 @@ h1 {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: start;
-  gap: 8px;
+  gap: 5px;
 }
 
 .record-edit-panel .section-head .secondary-button {
@@ -990,22 +990,22 @@ h1 {
 .record-edit-form {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  gap: 5px;
 }
 
 .stack {
   display: grid;
-  gap: 8px;
+  gap: 4px;
 }
 
 .check-row,
 .material-row {
   align-items: center;
-  gap: 8px;
+  gap: 5px;
   border: 1px solid rgba(226, 235, 247, 0.1);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.045);
-  padding: 9px;
+  padding: 6px;
 }
 
 .check-row input[type="checkbox"] {
@@ -1038,7 +1038,7 @@ h1 {
 
 label {
   display: grid;
-  gap: 6px;
+  gap: 3px;
 }
 
 label span {
@@ -1057,7 +1057,7 @@ textarea {
   border-radius: 8px;
   background: rgba(5, 10, 18, 0.58);
   color: var(--ink);
-  padding: 10px 12px;
+  padding: 8px 9px;
 }
 
 input::placeholder,
@@ -1066,7 +1066,7 @@ textarea::placeholder {
 }
 
 textarea {
-  min-height: 120px;
+  min-height: 82px;
   resize: vertical;
   line-height: 1.4;
 }
@@ -1074,8 +1074,8 @@ textarea {
 .quick-form {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 8px;
-  margin-top: 10px;
+  gap: 4px;
+  margin-top: 5px;
 }
 
 .material-form {
@@ -1096,8 +1096,8 @@ dialog::backdrop {
 
 .dialog-panel {
   display: grid;
-  gap: 12px;
-  padding: 16px;
+  gap: 8px;
+  padding: 10px;
 }
 
 .settings-panel {
@@ -1110,7 +1110,7 @@ dialog::backdrop {
   border-radius: 8px;
   background: #050a12;
   color: #f8fafc;
-  padding: 12px;
+  padding: 8px;
   line-height: 1.45;
   overflow-x: auto;
 }
@@ -1156,11 +1156,11 @@ dialog::backdrop {
 
   .home-swipe {
     display: flex;
-    gap: 10px;
-    margin-inline: -10px;
+    gap: 4px;
+    margin-inline: -6px;
     overflow-x: auto;
-    padding: 0 10px 4px;
-    scroll-padding-inline: 10px;
+    padding: 0 6px;
+    scroll-padding-inline: 6px;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
   }
@@ -1200,8 +1200,8 @@ dialog::backdrop {
 
   .home-swipe > .hero-panel,
   .home-swipe > .project-list-panel {
-    flex: 0 0 min(520px, calc(100vw - 20px));
-    max-width: min(520px, calc(100vw - 20px));
+    flex: 0 0 min(520px, calc(100vw - 12px));
+    max-width: min(520px, calc(100vw - 12px));
     min-height: 0;
     scroll-snap-align: start;
     scroll-snap-stop: always;
@@ -1214,7 +1214,7 @@ dialog::backdrop {
 
 @media (max-width: 580px) {
   .app-shell {
-    padding-inline: 10px;
+    padding-inline: 6px;
   }
 
   .topbar {
@@ -1267,7 +1267,7 @@ dialog::backdrop {
 
   .project-list {
     display: grid;
-    gap: 8px;
+    gap: 4px;
   }
 
   .summary-grid,
@@ -1292,7 +1292,7 @@ dialog::backdrop {
   .tool-swipe > .panel-box,
   .handoff-swipe > .panel-box,
   .handoff-swipe > .ai-panel {
-    flex-basis: calc(100vw - 20px);
+    flex-basis: calc(100vw - 12px);
   }
 
   .proof-strip article {
